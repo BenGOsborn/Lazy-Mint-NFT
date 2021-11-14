@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -87,7 +87,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         _mintIcon(_amount);
     }
 
-    function _mintIcon(uint256 _amount) external {
+    function _mintIcon(uint256 _amount) internal {
         // Verify the amount of tokens to mint is greater than 0
         require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
 
