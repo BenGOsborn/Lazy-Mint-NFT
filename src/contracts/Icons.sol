@@ -59,8 +59,8 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         _;
     }
 
-    // Set the mint fee of the contract
-    function setMintFee(uint256 fee_) external onlyOwner {
+    // Set the mint fee for each token
+    function setMintFeePerToken(uint256 fee_) external onlyOwner {
         mintFeePerToken = fee_;
     }
 
