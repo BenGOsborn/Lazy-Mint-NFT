@@ -3,6 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
@@ -16,6 +17,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     bytes32 private jobId;
     uint256 linkFee;
     bytes32 private apiUrl;
+    address private linkAddress;
 
     // Token data
     uint256 private immutable MINT_FEE_PER_TOKEN; 
@@ -32,7 +34,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     mapping(bytes32 => MintRequest) private mintRequests;
 
     constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_,
-                address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_) ERC1155(uri_) {
+                address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_, address linkAddress_) ERC1155(uri_) {
         // Initialize contract data
         MINT_FEE_PER_TOKEN = mintFeePerToken_; 
         MAX_TOKENS = maxTokens_;
@@ -43,6 +45,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         jobId = jobId_;
         linkFee = linkFee_;
         apiUrl = apiUrl_;
+        linkAddress = linkAddress_;
     }
 
     function mint(uint256 _amount) external payable {
@@ -69,23 +72,30 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     
     function fulfill(bytes32 _requestId, string memory _uri) external recordChainlinkFulfillment(_requestId) {
         // Require that the request has not already been fulfilled
-        require(!mintRequests[_requestId].fulfilled, "Icons: This request has already been fulfilled");
+        MintRequest memory request = mintRequests[_requestId];
+        require(!request.fulfilled, "Icons: This request has already been fulfilled");
 
-        // Split the string and add the items to the individuals account
-        // **** Very confusing ???
-        // strings.split(strings.toSlice(_uri), strings.toSlice(" "), token);
-
-        strings.toString(self);
+        // Split the string and add the items to the minters account
+        strings.slice memory split = strings.toSlice(_uri);
+        strings.slice memory delim = strings.toSlice(" ");
+        for (uint i = 0; i < request.amount; i++) {
+            string memory uri = strings.split(split, delim).toString();
+            _mint(request.minter, request.initialTokenId + i, 1, uri);
+        }
 
         // Update the fulfiled state
         mintRequests[_requestId].fulfilled = true;
     }
 
     function withdraw() external onlyOwner {
-
+        // Withdraw the coins to the sender
+        uint256 balance = address(this).balance;
+        _msgSender().transfer(balance);
     }
 
     function withdrawLink() external onlyOwner {
-
+        // Withdraw the balance of LINK to the sender
+        uint256 balance = IERC20(linkAddress).balanceOf(address(this));
+        IERC20.transfer(_msgSender(), balance);
     }
 }
