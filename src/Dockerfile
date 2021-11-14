@@ -3,7 +3,7 @@ FROM node:17-alpine3.12
 WORKDIR /app
 
 # Copy over requirements
-COPY package* .
+COPY package* ./
 RUN npm install --production
 COPY app.js .
 
