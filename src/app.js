@@ -16,6 +16,7 @@ app.get("/generate", (req, res) => {
     // Generate new's NFT
     const svgArr = [];
     for (let i = 0; i < amount; i++) {
+        console.log(parseInt(tokenId) + i);
         const svg = createAvatar(style, { seed: parseInt(tokenId) + i });
         svgArr.push(Buffer.from(svg));
     }
@@ -27,7 +28,9 @@ app.get("/generate", (req, res) => {
             return res.status(400).send(err);
         }
         for (const file of files) {
-            uri += `https://ipfs.io/ipfs/${file.path} `;
+            const temp = `https://ipfs.io/ipfs/${file.path} `;
+            uri += temp;
+            console.log(temp);
         }
     });
 
