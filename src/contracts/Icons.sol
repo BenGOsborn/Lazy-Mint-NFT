@@ -11,6 +11,7 @@ import "./lib/strings.sol";
 
 contract Icons is Ownable, ERC1155, ChainlinkClient {
     using SafeMath for uint256;
+    using Chainlink for Chainlink.Request;
 
     // Chainlink data
     address private oracle;
