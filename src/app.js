@@ -17,12 +17,12 @@ app.get("/generate", (req, res) => {
     const svgArr = [];
     for (let i = 0; i < amount; i++) {
         const svg = createAvatar(style, { seed: parseInt(tokenId) + i });
-        svgArr.push(svg);
+        svgArr.push(Buffer.from(svg));
     }
 
     // Add the files to IPFS
     let uri = "";
-    ipfs.files.add(buffer, (err, files) => {
+    ipfs.files.add(svgArr, (err, files) => {
         if (err) {
             return res.status(400).send(err);
         }
