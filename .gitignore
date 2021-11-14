@@ -104,4 +104,11 @@ dist
 .tern-port
 
 # Misc
-artifacts/
+node_modules
+.env
+coverage
+coverage.json
+typechain
+cache
+artifacts
+
