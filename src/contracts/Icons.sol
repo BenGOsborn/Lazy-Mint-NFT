@@ -62,7 +62,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     }
 
     // Get the mint fee
-    function mintFee() external returns (uint256) {
+    function mintFee() external view returns (uint256) {
         return mintFeePerToken;
     }
 

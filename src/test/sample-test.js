@@ -1,11 +1,14 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
+// Constructor data
+
 describe("Icons", function () {
     it("Should deploy the contract", async function () {
-        const Greeter = await ethers.getContractFactory("Greeter");
-        const greeter = await Greeter.deploy("Hello, world!");
-        await greeter.deployed();
+        // Initialize the contract
+        const Icons = await ethers.getContractFactory("Icons");
+        const icons = await Greeter.deploy("");
+        await icons.deployed();
 
         expect(await greeter.greet()).to.equal("Hello, world!");
 
