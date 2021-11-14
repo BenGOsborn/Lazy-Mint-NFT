@@ -36,11 +36,12 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     }
     mapping(bytes32 => MintRequest) private mintRequests;
 
-    constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_,
+    constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
                 address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_, address linkAddress_) ERC1155(uri_) {
         // Initialize contract data
         MINT_FEE_PER_TOKEN = mintFeePerToken_; 
         MAX_TOKENS = maxTokens_;
+        earlyMintEnd = earlyMintEnd_;
         tokenId = 0;
 
         // Initialize chainlink data
@@ -51,11 +52,18 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         linkAddress = linkAddress_;
     }
 
-    function mint(uint256 _amount) external payable {
+    modifier mintable(uint256 _amount) {
         // Verify the tokens may be minted
         require(tokenId + _amount < MAX_TOKENS, "Icons: Tokens to mint exceeds max number of tokens");
-        require(msg.value >= _amount.mul(MINT_FEE_PER_TOKEN), "Icons: Not enough funds to mint contract");
+        require(msg.value >= _amount.mul(MINT_FEE_PER_TOKEN) || _msgSender() == owner(), "Icons: Not enough funds to mint contract");
+        _;
+    }
 
+    function earlyMint(uint256 _amount) external payable mintable(_amount) {
+
+    }
+
+    function mint(uint256 _amount) external payable mintable(_amount) {
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         request.add("post", apiUrl);
