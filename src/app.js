@@ -35,6 +35,7 @@ app.get("/generate", async (req, res) => {
     return res.send(uri);
 });
 
+// Start the server
 app.listen(5000 || process.env.PORT, () => {
     console.log("Started server...");
 });
