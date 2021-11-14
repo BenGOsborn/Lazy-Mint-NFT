@@ -6,7 +6,7 @@ const ipfsAPI = require("ipfs-api");
 // Initialize IPFS
 const ipfs = ipfsAPI("ipfs.infura.io", "5001", { protocol: "https" });
 
-app.get("/generate", (req, res) => {
+app.get("/generate", async (req, res) => {
     // Get the query params
     const { tokenId, amount } = req.query;
 
@@ -16,23 +16,17 @@ app.get("/generate", (req, res) => {
     // Generate new's NFT
     const svgArr = [];
     for (let i = 0; i < amount; i++) {
-        console.log(tokenId + i);
         const svg = createAvatar(style, { seed: tokenId + i });
         svgArr.push(Buffer.from(svg));
     }
 
-    // Add the files to IPFS
+    // Add the files to IPFS and record their paths
     let uri = "";
-    ipfs.files.add(svgArr, (err, files) => {
-        if (err) {
-            return res.status(400).send(err);
-        }
-        for (const file of files) {
-            const temp = `https://ipfs.io/ipfs/${file.path} `;
-            uri += temp;
-            console.log(temp);
-        }
-    });
+    const { err, files } = await ipfs.files.add(svgArr);
+    if (err) return res.status(400).end(err);
+    for (const file of files) {
+        uri += `https://ipfs.io/ipfs/${file.path} `;
+    }
 
     // Return the uri
     return res.send(uri);
