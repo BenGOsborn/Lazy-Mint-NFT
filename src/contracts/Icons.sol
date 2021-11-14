@@ -25,7 +25,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     uint256 private tokenId;
 
     // Store token mint requests
-    address[] private authorizedEarlyMinters;
+    mapping(address => uint256) private earlyMinters;
     uint256 private earlyMintEnd;
 
     struct MintRequest {
@@ -59,11 +59,26 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         _;
     }
 
-    function earlyMint(uint256 _amount) external payable mintable(_amount) {
+    // Make sure that multiple addresses may not remint
+    function earlyMintList(address _address, uint256 _amount) external onlyOwner {
+        // Set the users early mint limit
+        earlyMinters[_address] = _amount;
+    }
 
+    function earlyMint(uint256 _amount) external payable mintable(_amount) {
+        // Mint the token if the user is approved and it is still in the early mint phase
+        require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
+        require(earlyMinters[_msgSender()] >= _amount, "Icons: You are not authorized to mint this amount of tokens");
+        _mintIcon(_amount);
     }
 
     function mint(uint256 _amount) external payable mintable(_amount) {
+        // Mint the token if it is after the early minting phase
+        require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
+        _mintIcon(_amount);
+    }
+
+    function _mintIcon(uint256 _amount) {
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         request.add("post", apiUrl);
