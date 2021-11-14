@@ -14,17 +14,22 @@ app.get("/generate", (req, res) => {
     if (typeof tokenId === "undefined" || typeof amount === "undefined") return res.status(400).end();
 
     // Generate new's NFT
-    let uri = "";
+    const svgArr = [];
     for (let i = 0; i < amount; i++) {
         const svg = createAvatar(style, { seed: parseInt(tokenId) + i });
-        let buffer = Buffer.from(svg);
-        ipfs.files.add(buffer, (err, file) => {
-            if (err) {
-                return res.status(400).send(err);
-            }
-            uri += file + " ";
-        });
+        svgArr.push(svg);
     }
+
+    // Add the files to IPFS
+    let uri = "";
+    ipfs.files.add(buffer, (err, files) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        for (const file of files) {
+            uri += `https://ipfs.io/ipfs/${file.path} `;
+        }
+    });
 
     // Return the uri
     return res.send(uri);
