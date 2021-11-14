@@ -26,6 +26,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
 
     // Store token mint requests
     address[] private authorizedEarlyMinters;
+    uint256 private earlyMintEnd;
 
     struct MintRequest {
         uint256 initialTokenId;
