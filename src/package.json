@@ -5,10 +5,17 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "devDependencies": {
+        "@nomiclabs/hardhat-waffle": "^2.0.1",
+        "@typechain/ethers-v5": "^8.0.2",
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.11.7",
+        "ethereum-waffle": "^3.4.0",
+        "ethers": "^5.5.1",
         "hardhat": "^2.6.8",
+        "hardhat-typechain": "^0.3.5",
+        "ts-generator": "^0.1.1",
         "ts-node": "^10.4.0",
+        "typechain": "^6.0.2",
         "typescript": "^4.4.4"
     }
 }
