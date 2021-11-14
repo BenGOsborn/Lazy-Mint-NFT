@@ -5,6 +5,10 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "devDependencies": {
-        "hardhat": "^2.6.8"
+        "@types/mocha": "^9.0.0",
+        "@types/node": "^16.11.7",
+        "hardhat": "^2.6.8",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.4.4"
     }
 }
