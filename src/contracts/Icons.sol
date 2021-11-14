@@ -72,7 +72,10 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         require(!mintRequests[_requestId].fulfilled, "Icons: This request has already been fulfilled");
 
         // Split the string and add the items to the individuals account
+        // **** Very confusing ???
+        // strings.split(strings.toSlice(_uri), strings.toSlice(" "), token);
 
+        strings.toString(self);
 
         // Update the fulfiled state
         mintRequests[_requestId].fulfilled = true;
