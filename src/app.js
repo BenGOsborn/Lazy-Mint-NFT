@@ -1,6 +1,10 @@
 const app = require("express")();
 const { createAvatar } = require("@dicebear/avatars");
 const style = require("@dicebear/personas");
+const ipfsAPI = require("ipfs-api");
+
+// Initialize IPFS
+const ipfs = ipfsAPI("ipfs.infura.io", "5001", { protocol: "https" });
 
 app.get("/generate", (req, res) => {
     // Get the query params
@@ -11,8 +15,14 @@ app.get("/generate", (req, res) => {
 
     // Generate new's NFT
     for (let i = 0; i < amount; i++) {
-        const svg = createAvatar(style, { seed: 1 });
+        const svg = createAvatar(style, { seed: parseInt(tokenId) + i });
         let buffer = Buffer.from(svg);
+        ipfs.files.add(buffer, (err, file) => {
+            if (err) {
+                return res.status(400).send(err);
+            }
+            console.log(file);
+        });
     }
 });
 

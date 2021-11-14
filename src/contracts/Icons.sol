@@ -83,6 +83,9 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     }
 
     function _mintIcon(uint256 _amount) {
+        // Verify the amount of tokens to mint is greater than 0
+        require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
+
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         request.add("get", apiUrl);
