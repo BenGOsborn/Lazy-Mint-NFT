@@ -95,7 +95,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
 
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
-        request.add("get", bytes32ToString(apiUrl));
+        request.add("get", Strings.bytes32ToString(apiUrl));
         request.add("queryParams", string(abi.encode("tokenId=", tokenId, "&amount=", _amount)));
 
         // Update the new current token id
@@ -127,24 +127,12 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     function withdraw() external onlyOwner {
         // Withdraw the coins to the sender
         uint256 balance = address(this).balance;
-        _msgSender().transfer(balance);
+        payable(_msgSender()).transfer(balance);
     }
 
     function withdrawLink() external onlyOwner {
         // Withdraw the balance of LINK to the sender
         uint256 balance = IERC20(linkAddress).balanceOf(address(this));
-        IERC20.transfer(_msgSender(), balance);
-    }
-
-    function bytes32ToString(bytes32 _bytes32) public pure returns (string memory) {
-        uint8 i = 0;
-        while(i < 32 && _bytes32[i] != 0) {
-            i++;
-        }
-        bytes memory bytesArray = new bytes(i);
-        for (i = 0; i < 32 && _bytes32[i] != 0; i++) {
-            bytesArray[i] = _bytes32[i];
-        }
-        return string(bytesArray);
+        IERC20(linkAddress).transfer(_msgSender(), balance);
     }
 }
