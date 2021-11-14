@@ -22,10 +22,13 @@ app.get("/generate", async (req, res) => {
 
     // Add the files to IPFS and record their paths
     let uri = "";
-    const { err, files } = await ipfs.files.add(svgArr);
-    if (err) return res.status(400).end(err);
-    for (const file of files) {
-        uri += `https://ipfs.io/ipfs/${file.path} `;
+    try {
+        const files = await ipfs.files.add(svgArr);
+        for (const file of files) {
+            uri += `https://ipfs.io/ipfs/${file.path} `;
+        }
+    } catch (err) {
+        return res.status(400).end(err);
     }
 
     // Return the uri
