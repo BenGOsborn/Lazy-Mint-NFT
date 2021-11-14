@@ -59,9 +59,8 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         _;
     }
 
-    // Make sure that multiple addresses may not remint
+    // Set the users early mint limit
     function earlyMintList(address _address, uint256 _amount) external onlyOwner {
-        // Set the users early mint limit
         earlyMinters[_address] = _amount;
     }
 
