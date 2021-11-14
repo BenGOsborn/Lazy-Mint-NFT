@@ -8,4 +8,4 @@ RUN npm install --production
 COPY app.js .
 
 # Start the container
-CMD ["node", "app.js"]
+CMD ["npm", "run", "server"]

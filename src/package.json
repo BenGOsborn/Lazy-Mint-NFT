@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "scripts": {
         "build": "npx hardhat compile",
-        "test": "npx hardhat test"
+        "test": "npx hardhat test",
+        "server": "node app.js"
     },
     "devDependencies": {
         "@chainlink/contracts": "^0.2.2",
