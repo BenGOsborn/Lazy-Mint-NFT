@@ -55,7 +55,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     modifier mintable(uint256 _amount) {
         // Verify the tokens may be minted
         require(tokenId + _amount < MAX_TOKENS, "Icons: Tokens to mint exceeds max number of tokens");
-        require(msg.value >= _amount.mul(MINT_FEE_PER_TOKEN) || _msgSender() == owner(), "Icons: Not enough funds to mint contract");
+        require(msg.value >= _amount.mul(mintFeePerToken) || _msgSender() == owner(), "Icons: Not enough funds to mint contract");
         _;
     }
 
