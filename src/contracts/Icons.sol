@@ -7,11 +7,12 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "./lib/strings.sol";
+import "solidity-util/lib/Strings.sol";
 
 contract Icons is Ownable, ERC1155, ChainlinkClient {
     using SafeMath for uint256;
     using Chainlink for Chainlink.Request;
+    using Strings for string;
 
     // Chainlink data
     address private oracle;
@@ -114,11 +115,9 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         require(!request.fulfilled, "Icons: This request has already been fulfilled");
 
         // Split the string and add the items to the minters account
-        strings.slice memory split = strings.toSlice(_uri);
-        strings.slice memory delim = strings.toSlice(" ");
+        string[] storage split = _uri.split(" ");
         for (uint i = 0; i < request.amount; i++) {
-            string memory uri = strings.split(split, delim).toString();
-            _mint(request.minter, request.initialTokenId + i, 1, uri);
+            _mint(request.minter, request.initialTokenId + i, 1, split[i]);
         }
 
         // Update the fulfiled state

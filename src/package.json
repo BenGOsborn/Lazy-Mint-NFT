@@ -19,6 +19,7 @@
         "ethers": "^5.5.1",
         "hardhat": "^2.6.8",
         "hardhat-typechain": "^0.3.5",
+        "solidity-util": "github:willitscale/solidity-util",
         "ts-generator": "^0.1.1",
         "ts-node": "^10.4.0",
         "typechain": "^6.0.2",
