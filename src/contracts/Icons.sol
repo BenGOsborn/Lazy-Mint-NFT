@@ -85,7 +85,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     function _mintIcon(uint256 _amount) {
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
-        request.add("post", apiUrl);
+        request.add("get", apiUrl);
         request.add("queryParams", abi.encode("tokenId=", tokenId, "&amount=", _amount));
         request.add("path", "URIs");
 

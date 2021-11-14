@@ -21,5 +21,11 @@
         "typechain": "^6.0.2",
         "typescript": "^4.4.4"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@dicebear/avatars": "^4.10.1",
+        "@dicebear/personas": "^4.10.1",
+        "express": "^4.17.1",
+        "fs": "0.0.1-security",
+        "ipfs-api": "^26.1.2"
+    }
 }
