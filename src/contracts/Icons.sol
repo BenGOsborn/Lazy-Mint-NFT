@@ -64,7 +64,8 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         tokenId += _amount;
     }
     
-    function fulfill(bytes32 _requestId, string[] memory _uri) external recordChainlinkFulfillment(_requestId) {
+    function fulfill(bytes32 _requestId, string memory _uri) external recordChainlinkFulfillment(_requestId) {
+        // Split the string and add the items to the individuals account
     }
 
     function withdraw() external onlyOwner {
