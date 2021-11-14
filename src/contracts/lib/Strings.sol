@@ -183,7 +183,7 @@ library Strings {
      *               otherwise this is the string value to be split.
      * @param _value The delimiter to split the string on which must be a single
      *               character
-     * @return string[] An array of values split based off the delimiter, but
+     * @return splitArr An array of values split based off the delimiter, but
      *                  do not container the delimiter.
      */
     function split(string memory _base, string memory _value)
