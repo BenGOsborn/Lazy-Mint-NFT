@@ -14,6 +14,7 @@ app.get("/generate", (req, res) => {
     if (typeof tokenId === "undefined" || typeof amount === "undefined") return res.status(400).end();
 
     // Generate new's NFT
+    let uri = "";
     for (let i = 0; i < amount; i++) {
         const svg = createAvatar(style, { seed: parseInt(tokenId) + i });
         let buffer = Buffer.from(svg);
@@ -21,9 +22,12 @@ app.get("/generate", (req, res) => {
             if (err) {
                 return res.status(400).send(err);
             }
-            console.log(file);
+            uri += file + " ";
         });
     }
+
+    // Return the uri
+    return res.send(uri);
 });
 
 app.listen(5000 || process.env.PORT, () => {

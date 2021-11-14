@@ -90,7 +90,6 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         request.add("get", apiUrl);
         request.add("queryParams", abi.encode("tokenId=", tokenId, "&amount=", _amount));
-        request.add("path", "URIs");
 
         // Update the new current token id
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
