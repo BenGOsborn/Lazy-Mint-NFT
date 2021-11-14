@@ -5,8 +5,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 
-contract Icons is Ownable, ERC1155 {
+contract Icons is Ownable, ERC1155, ChainlinkClient {
     using SafeMath for uint256;
 
     uint256 private immutable MINT_FEE_PER_TOKEN; 
@@ -15,7 +16,7 @@ contract Icons is Ownable, ERC1155 {
     uint256 private tokenId;
 
     struct MintRequest {
-        
+
     }
 
     constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_) ERC1155(uri_) {
@@ -30,14 +31,21 @@ contract Icons is Ownable, ERC1155 {
         require(tokenId + _amount < MAX_TOKENS, "Icons: Tokens to mint exceeds max number of tokens");
         require(msg.value >= _amount.mul(MINT_FEE_PER_TOKEN), "Icons: Not enough funds to mint contract");
 
-        // Mint the NFT's for the address
-        for (uint i = 0; i < _amount; i++) {
-            // _mint(_msgSender(), tokenId, 1, data);
-            tokenId++;
-        }
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
+
+        // Update the new current token id
+        tokenId += _amount;
     }
     
-    function fullfillRandomoness() external {
-        // Go through and mint the NFT here with the received data
+    function fulfill(bytes32 _requestId, string[] memory _uri) external recordChainlinkFulfillment(_requestId) {
+        // 
+    }
+
+    function withdraw() external onlyOwner {
+
+    }
+
+    function withdrawLink() external onlyOwner {
+        
     }
 }
