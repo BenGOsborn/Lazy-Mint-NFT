@@ -20,8 +20,8 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     address private linkAddress;
 
     // Token data
-    uint256 private immutable MINT_FEE_PER_TOKEN; 
     uint256 private immutable MAX_TOKENS; 
+    uint256 private mintFeePerToken; 
     uint256 private tokenId;
 
     // Store token mint requests
@@ -39,8 +39,8 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
                 address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_, address linkAddress_) ERC1155(uri_) {
         // Initialize contract data
-        MINT_FEE_PER_TOKEN = mintFeePerToken_; 
         MAX_TOKENS = maxTokens_;
+        mintFeePerToken = mintFeePerToken_; 
         earlyMintEnd = earlyMintEnd_;
         tokenId = 0;
 
@@ -57,6 +57,11 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         require(tokenId + _amount < MAX_TOKENS, "Icons: Tokens to mint exceeds max number of tokens");
         require(msg.value >= _amount.mul(MINT_FEE_PER_TOKEN) || _msgSender() == owner(), "Icons: Not enough funds to mint contract");
         _;
+    }
+
+    // Set the mint fee of the contract
+    function setMintFee(uint256 fee_) external onlyOwner {
+        mintFeePerToken = fee_;
     }
 
     // Set the users early mint limit
