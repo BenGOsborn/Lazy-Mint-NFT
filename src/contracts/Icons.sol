@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import "./lib/strings.sol";
 
 contract Icons is Ownable, ERC1155, ChainlinkClient {
     using SafeMath for uint256;
@@ -26,6 +27,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         uint256 initialTokenId;
         uint256 amount;
         address minter;
+        bool fulfilled;
     }
     mapping(bytes32 => MintRequest) private mintRequests;
 
@@ -59,13 +61,21 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         mintRequests[requestId] = MintRequest({
             initialTokenId: tokenId,
             amount: _amount,
-            minter: _msgSender()
+            minter: _msgSender(),
+            fulfilled: false
         });
         tokenId += _amount;
     }
     
     function fulfill(bytes32 _requestId, string memory _uri) external recordChainlinkFulfillment(_requestId) {
+        // Require that the request has not already been fulfilled
+        require(!mintRequests[_requestId].fulfilled, "Icons: This request has already been fulfilled");
+
         // Split the string and add the items to the individuals account
+
+
+        // Update the fulfiled state
+        mintRequests[_requestId].fulfilled = true;
     }
 
     function withdraw() external onlyOwner {
