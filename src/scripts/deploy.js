@@ -32,6 +32,8 @@ async function main() {
     await icons.deployed();
 
     console.log("Contract deployed to:", icons.address);
+
+    // Fund the contract with LINK
 }
 
 // We recommend this pattern to be able to use async/await everywhere
