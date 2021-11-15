@@ -100,8 +100,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
 
         // Initialize the request
-        bytes memory jobIdBytes = bytes(jobId);
-        Chainlink.Request memory request = buildChainlinkRequest(bytes32(jobIdBytes), address(this), this.fulfill.selector);
+        Chainlink.Request memory request = buildChainlinkRequest(stringToBytes32(jobId), address(this), this.fulfill.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId, "&amount=", _amount)));
 
         // Update the new current token id
@@ -141,5 +140,16 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         // Withdraw the balance of LINK to the sender
         uint256 balance = IERC20(linkAddress).balanceOf(address(this));
         IERC20(linkAddress).transfer(_msgSender(), balance);
+    }
+
+    function stringToBytes32(string memory source) private pure returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
+        }
+
+        assembly {
+            result := mload(add(source, 32))
+        }
     }
 }
