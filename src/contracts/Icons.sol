@@ -56,6 +56,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         jobId = "187bb80e5ee74a139734cac7475f3c6e";
         linkFee = 1e16;
         apiUrl = "https://lazy-nft.herokuapp.com/generate";
+
         linkAddress = linkAddress_;
     }
 
