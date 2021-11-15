@@ -22,7 +22,8 @@ async function main() {
     await link.transfer(icons.address, 4e18);
 
     // Mint a token
-    // **** Code goes here
+    const fee = await icons.mintFee();
+    await icons.earlyMint(1, { value: fee });
 
     // Withdraw the MATIC and LINK from the contract
     await icons.withdraw();
