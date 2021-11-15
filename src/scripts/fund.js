@@ -5,7 +5,7 @@
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 const ERC20ABI = require("@openzeppelin/contracts/build/contracts/ERC20.json");
-const IconsABI = require("../artifacts/contracts/Icons.sol/Icons.json");
+const IconsABI = require("../artifacts/contracts/APIConsumer.sol/APIConsumer.json");
 const fs = require("fs");
 
 async function main() {

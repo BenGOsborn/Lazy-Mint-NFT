@@ -4,7 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
-const IconsABI = require("../artifacts/contracts/Icons.sol/Icons.json");
+const IconsABI = require("../artifacts/contracts/APIConsumer.sol/APIConsumer.json");
 const fs = require("fs");
 
 async function main() {
