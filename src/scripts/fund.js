@@ -4,6 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const ERC20ABI = require("@openzeppelin/contracts/build/contracts/ERC20.json");
 const IconsABI = require("../artifacts/contracts/Icons.sol/Icons.json");
 const fs = require("fs");
 
@@ -24,22 +25,11 @@ async function main() {
     const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, signer);
     console.log("Initialized Icons contract from " + FILENAME);
 
-    // Mint a token
-    const NUM_TOKENS = 1;
-    const minter = await signer.getAddress();
-    await icons.earlyMintList(minter, NUM_TOKENS);
-    console.log("Added " + minter + " to early mint list");
-
-    const fee = await icons.mintFee();
-    console.log("Fee", fee);
-    // await icons.earlyMint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
-    await icons.mint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
-    console.log("Minted " + NUM_TOKENS + " tokens");
-
-    // View the minted NFT events
-    icons.on("TransferSingle", (operator, from, to, id, value) => {
-        console.log(operator, from, to, id, value);
-    });
+    // Fund the contract with LINK
+    const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+    const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20ABI.abi, signer);
+    await link.transfer(icons.address, (1e18).toString());
+    console.log("Initialized LINK contract and sent LINK tokens");
 }
 
 // We recommend this pattern to be able to use async/await everywhere
