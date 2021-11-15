@@ -27,7 +27,8 @@ async function main() {
 
     // Compile and deploy the contract
     await hre.run("compile");
-    const Icons = await hre.ethers.getContractFactory("Icons");
+    // const Icons = await hre.ethers.getContractFactory("Icons");
+    const Icons = await hre.ethers.getContractFactory("APIConsumer");
     // const icons = await Icons.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, ORACLE, JOB_ID, LINK_FEE, API_URL, LINK_ADDRESS);
     // const icons = await Icons.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, LINK_ADDRESS);
     const icons = await Icons.deploy();
