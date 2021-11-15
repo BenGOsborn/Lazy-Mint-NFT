@@ -14,8 +14,15 @@ async function main() {
     // await hre.run('compile');
 
     // Contract parameters
-    uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
-                address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_, address linkAddress_) ERC1155(uri_) {
+    const MINT_FEE_PER_TOKEN = "";
+    const MAX_TOKENS = "";
+    const URI = "";
+    const EARLY_MINT_END = "";
+    const ORACLE = "";
+    const JOB_ID = "";
+    const LINK_FEE = "";
+    const API_URL = "";
+    const LINK_ADDRESS = "";
 
     // Compile and deploy the contract
     await hre.run("compile");
