@@ -20,12 +20,9 @@ async function main() {
     const URI = "";
     const EARLY_MINT_END = Math.floor((Date.now() + 3.6e6) / 1000);
     const ORACLE = "0x0bDDCD124709aCBf9BB3F824EbC61C87019888bb";
-
-    // **** Try deploying these as strings and see what happens
-
     const JOB_ID = hre.ethers.utils.id("c6a006e4f4844754a6524445acde84a0");
     const LINK_FEE = (0.1e18).toString();
-    const API_URL = hre.ethers.utils.id("https://lazy-nft.herokuapp.com/generate");
+    const API_URL = "https://lazy-nft.herokuapp.com/generate";
     const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 
     // Compile and deploy the contract

@@ -18,7 +18,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     address private oracle;
     bytes32 private jobId;
     uint256 linkFee;
-    bytes32 private apiUrl;
+    string private apiUrl;
     address private linkAddress;
 
     // Token data
@@ -39,7 +39,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     mapping(bytes32 => MintRequest) private mintRequests;
 
     constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
-                address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_, address linkAddress_) ERC1155(uri_) {
+                address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC1155(uri_) {
         // Initialize contract data
         MAX_TOKENS = maxTokens_;
         mintFeePerToken = mintFeePerToken_; 
@@ -63,7 +63,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     }
 
     // Update the API url
-    function setAPIUrl(bytes32 _url) external onlyOwner {
+    function setAPIUrl(string memory _url) external onlyOwner {
         apiUrl = _url;
     }
 
