@@ -4,6 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const ERC20Abi = require("@openzeppelin/contracts/build/contracts/ERC20.json");
 
 async function main() {
     // Hardhat always runs the compile task when running scripts with its command
@@ -22,7 +23,7 @@ async function main() {
     const JOB_ID = "";
     const LINK_FEE = "";
     const API_URL = "";
-    const LINK_ADDRESS = "";
+    const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 
     // Compile and deploy the contract
     await hre.run("compile");
@@ -34,8 +35,7 @@ async function main() {
     console.log("Contract deployed to:", icons.address);
 
     // Fund the contract with LINK
-    const accounts = await hre.ethers.provider.listAccounts();
-    const account = accounts[0];
+    const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20Abi, hre.ethers.provider);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
