@@ -101,8 +101,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
 
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
-        request.add("get", Strings.bytes32ToString(apiUrl));
-        request.add("queryParams", string(abi.encode("tokenId=", tokenId, "&amount=", _amount)));
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId, "&amount=", _amount)));
 
         // Update the new current token id
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
@@ -121,7 +120,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         require(!request.fulfilled, "Icons: This request has already been fulfilled");
 
         // Split the string and add the items to the minters account
-        string[] memory split = Strings.bytes32ToString(_uri).split(" ");
+        string[] memory split = string(abi.encodePacked(_uri)).split(" ");
         for (uint i = 0; i < request.amount; i++) {
             _mint(request.minter, request.initialTokenId + i, 1, bytes(split[i]));
         }
