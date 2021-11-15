@@ -18,9 +18,9 @@ async function main() {
     const MAX_TOKENS = 1000;
     const URI = "";
     const EARLY_MINT_END = Math.floor((Date.now() + 3.6e6) / 1000);
-    const ORACLE = "";
-    const JOB_ID = "";
-    const LINK_FEE = "";
+    const ORACLE = "0x0bDDCD124709aCBf9BB3F824EbC61C87019888bb";
+    const JOB_ID = "c6a006e4f4844754a6524445acde84a0";
+    const LINK_FEE = 0.1e18;
     const API_URL = "";
     const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 

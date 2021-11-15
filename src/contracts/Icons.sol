@@ -114,13 +114,13 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         tokenId += _amount;
     }
     
-    function fulfill(bytes32 _requestId, string memory _uri) external recordChainlinkFulfillment(_requestId) {
+    function fulfill(bytes32 _requestId, bytes32 _uri) external recordChainlinkFulfillment(_requestId) {
         // Require that the request has not already been fulfilled
         MintRequest memory request = mintRequests[_requestId];
         require(!request.fulfilled, "Icons: This request has already been fulfilled");
 
         // Split the string and add the items to the minters account
-        string[] memory split = _uri.split(" ");
+        string[] memory split = Strings.bytes32ToString(_uri).split(" ");
         for (uint i = 0; i < request.amount; i++) {
             _mint(request.minter, request.initialTokenId + i, 1, bytes(split[i]));
         }
