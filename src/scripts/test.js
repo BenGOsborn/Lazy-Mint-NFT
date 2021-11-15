@@ -25,10 +25,11 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // Request volume data
-    await icons.requestData();
+    // await icons.requestData();
 
     // View the volume data
-    console.log(await icons.getData());
+    const bytes = await icons.getData();
+    console.log(hre.ethers.utils.parseBytes32String(bytes));
 }
 
 // We recommend this pattern to be able to use async/await everywhere

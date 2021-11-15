@@ -88,7 +88,7 @@ contract APIConsumer is ChainlinkClient {
         IERC20(linkAddress).transfer(msg.sender, balance);
     }
 
-    function getData() external view returns (bytes32) {
-        return response;
+    function getData() external view returns (string memory) {
+        return string(abi.encodePacked(response));
     }
 }
