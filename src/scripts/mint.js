@@ -6,6 +6,7 @@
 const hre = require("hardhat");
 const ERC20ABI = require("@openzeppelin/contracts/build/contracts/ERC20.json");
 const IconsABI = require("../artifacts/contracts/Icons.sol/Icons.json");
+const fs = require("fs");
 
 async function main() {
     // Hardhat always runs the compile task when running scripts with its command
@@ -23,7 +24,8 @@ async function main() {
     await link.transfer(icons.address, 4e18);
 
     // Initialize the contract
-    const icons = new hre.ethers.Contract(IconsABI.address, IconsABI.abi, hre.ethers.provider);
+    const iconsAddress = fs.readFileSync("address.txt", "utf8");
+    const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, hre.ethers.provider);
 
     // Mint a token
     const fee = await icons.mintFee();
