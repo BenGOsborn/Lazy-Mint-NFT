@@ -16,16 +16,14 @@ async function main() {
     // manually to make sure everything is compiled
     // await hre.run('compile');
 
-    // Contract parameters
-    const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-
-    // Fund the contract with LINK
-    const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20ABI.abi, hre.ethers.provider);
-    await link.transfer(icons.address, 4e18);
-
     // Initialize the contract
     const iconsAddress = fs.readFileSync("address.txt", "utf8");
     const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, hre.ethers.provider);
+
+    // Fund the contract with LINK
+    const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+    const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20ABI.abi, hre.ethers.provider);
+    await link.transfer(icons.address, 4e18);
 
     // Mint a token
     const fee = await icons.mintFee();
