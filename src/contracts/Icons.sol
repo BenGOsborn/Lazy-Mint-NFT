@@ -100,7 +100,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         _mintIcon(_amount);
     }
 
-    function _mintIcon(uint256 _amount) internal returns (bytes32) {
+    function _mintIcon(uint256 _amount) internal {
         // Verify the amount of tokens to mint is greater than 0
         require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
 
@@ -118,26 +118,9 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
             fulfilled: false
         });
         tokenId += _amount;
-
-        // **** ======= REMOVE THIS AFTER ======
-        // Require that the request has not already been fulfilled
-        MintRequest memory req = mintRequests[requestId];
-        require(!req.fulfilled, "Icons: This request has already been fulfilled");
-
-        // Split the string and add the items to the minters account
-        string[] memory split = string(abi.encodePacked("hello world ")).split(" ");
-        for (uint i = 0; i < 2; i++) {
-            _mint(req.minter, req.initialTokenId + i, 1, bytes(split[i]));
-        }
-
-        // Update the fulfiled state
-        mintRequests[requestId].fulfilled = true;
-        // **** =================
-
-        return requestId;
     }
     
-    function fulfill(bytes32 _requestId, bytes32 _uri) external recordChainlinkFulfillment(_requestId) {
+    function fulfill(bytes32 _requestId, bytes32 _uri) public recordChainlinkFulfillment(_requestId) {
         // Require that the request has not already been fulfilled
         MintRequest memory request = mintRequests[_requestId];
         require(!request.fulfilled, "Icons: This request has already been fulfilled");
