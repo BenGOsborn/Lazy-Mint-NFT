@@ -35,7 +35,13 @@ async function main() {
     // Fund the contract with LINK
     const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20Abi, hre.ethers.provider);
     const deployerAddress = (await hre.ethers.getSigner()).address;
-    await link.transfer(icons.address, 5e18);
+    await link.transfer(icons.address, 4e18);
+
+    // Make the transaction
+
+    // Withdraw the MATIC and LINK from the contract
+    await icons.withdraw();
+    await icons.withdrawLink();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
