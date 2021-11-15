@@ -18,6 +18,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 
+// **** TRY TESTING ON A DIFFERENT BLOCKCHAIN WITH A DIFFERENT ADAPTER
+
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 module.exports = {
