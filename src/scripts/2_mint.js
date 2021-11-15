@@ -15,29 +15,13 @@ async function main() {
     // await hre.run('compile');
 
     // Contract parameters
-    const MINT_FEE_PER_TOKEN = 10;
-    const MAX_TOKENS = 1000;
-    const URI = "";
-    const EARLY_MINT_END = Math.floor((Date.now() + 3.6e6) / 1000);
-    const ORACLE = "";
-    const JOB_ID = "";
-    const LINK_FEE = "";
-    const API_URL = "";
     const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-
-    // Compile and deploy the contract
-    await hre.run("compile");
-    const Icons = await hre.ethers.getContractFactory("Icons");
-
-    const icons = await Greeter.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, ORACLE, JOB_ID, LINK_FEE, API_URL, LINK_ADDRESS);
-    await icons.deployed();
 
     // Fund the contract with LINK
     const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20Abi, hre.ethers.provider);
-    const deployerAddress = (await hre.ethers.getSigner()).address;
     await link.transfer(icons.address, 4e18);
 
-    // Make the transaction
+    // Mint a token
     // **** Code goes here
 
     // Withdraw the MATIC and LINK from the contract
