@@ -28,12 +28,14 @@ async function main() {
     await hre.run("compile");
     const Icons = await hre.ethers.getContractFactory("Icons");
 
-    const icons = await Greeter.deploy("Hello, Hardhat!");
+    const icons = await Greeter.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, ORACLE, JOB_ID, LINK_FEE, API_URL, LINK_ADDRESS);
     await icons.deployed();
 
     console.log("Contract deployed to:", icons.address);
 
     // Fund the contract with LINK
+    const accounts = await hre.ethers.provider.listAccounts();
+    const account = accounts[0];
 }
 
 // We recommend this pattern to be able to use async/await everywhere
