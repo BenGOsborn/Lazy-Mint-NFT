@@ -84,4 +84,8 @@ contract APIConsumer is ChainlinkClient {
         uint256 balance = IERC20(linkAddress).balanceOf(address(this));
         IERC20(linkAddress).transfer(msg.sender, balance);
     }
+
+    function getVolume() external view returns (uint256) {
+        return volume;
+    }
 }

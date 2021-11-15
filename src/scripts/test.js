@@ -25,20 +25,6 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // Mint a token
-    const NUM_TOKENS = 1;
-    const minter = await signer.getAddress();
-    await icons.earlyMintList(minter, NUM_TOKENS);
-    console.log("Added " + minter + " to early mint list");
-
-    const fee = await icons.mintFee();
-    await icons.earlyMint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
-    // await icons.mint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
-    console.log("Minted " + NUM_TOKENS + " tokens");
-
-    // View the minted NFT events
-    icons.on("TransferSingle", (operator, from, to, id, value) => {
-        console.log(operator, from, to, id, value);
-    });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
