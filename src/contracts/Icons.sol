@@ -16,7 +16,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
 
     // Chainlink data
     address private oracle;
-    string private jobId;
+    bytes32 private jobId;
     uint256 linkFee;
     string private apiUrl;
     address private linkAddress;
@@ -39,7 +39,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     mapping(bytes32 => MintRequest) private mintRequests;
 
     constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
-                address oracle_, string memory jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC1155(uri_) {
+                address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC1155(uri_) {
         // Initialize contract data
         MAX_TOKENS = maxTokens_;
         mintFeePerToken = mintFeePerToken_; 
@@ -100,7 +100,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
 
         // Initialize the request
-        Chainlink.Request memory request = buildChainlinkRequest(stringToBytes32(jobId), address(this), this.fulfill.selector);
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId, "&amount=", _amount)));
 
         // Update the new current token id
@@ -140,16 +140,5 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         // Withdraw the balance of LINK to the sender
         uint256 balance = IERC20(linkAddress).balanceOf(address(this));
         IERC20(linkAddress).transfer(_msgSender(), balance);
-    }
-
-    function stringToBytes32(string memory source) private pure returns (bytes32 result) {
-        bytes memory tempEmptyStringTest = bytes(source);
-        if (tempEmptyStringTest.length == 0) {
-            return 0x0;
-        }
-
-        assembly {
-            result := mload(add(source, 32))
-        }
     }
 }
