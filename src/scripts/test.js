@@ -24,7 +24,11 @@ async function main() {
     const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, signer);
     console.log("Initialized Icons contract from " + FILENAME);
 
-    // Mint a token
+    // Request volume data
+    await icons.requestVolumeData();
+
+    // View the volume data
+    console.log(await icons.getVolumeData());
 }
 
 // We recommend this pattern to be able to use async/await everywhere
