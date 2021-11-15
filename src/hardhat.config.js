@@ -19,6 +19,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 
 // **** TRY TESTING ON A DIFFERENT BLOCKCHAIN WITH A DIFFERENT ADAPTER
+// **** USE THE SAME NETWORK AND ADAPTER AS THE ONE FROM THE TUTORIAL
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
