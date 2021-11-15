@@ -30,9 +30,12 @@ async function main() {
     const Icons = await hre.ethers.getContractFactory("Icons");
     const icons = await Icons.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, ORACLE, JOB_ID, LINK_FEE, API_URL, LINK_ADDRESS);
     await icons.deployed();
+    console.log("Deployed contract " + icons.address);
 
     // Save the address to a file
-    fs.writeFileSync("address.txt", icons.address);
+    const FILENAME = "address.txt";
+    fs.writeFileSync(FILENAME, icons.address);
+    console.log("Saved address to " + FILENAME);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
