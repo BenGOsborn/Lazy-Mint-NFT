@@ -16,7 +16,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract APIConsumer is ChainlinkClient {
     using Chainlink for Chainlink.Request;
   
-    uint256 public volume;
+    // uint256 public volume;
+    bytes32 private response;
     
     address private oracle;
     bytes32 private jobId;
@@ -35,7 +36,7 @@ contract APIConsumer is ChainlinkClient {
         linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
         setChainlinkToken(linkAddress);
         oracle = 0xc8D925525CA8759812d0c299B90247917d4d4b7C;
-        jobId = "bbf0badad29d49dc887504bacfbb905b";
+        jobId = "a7330d0b4b964c05abc66a26307047c0";
         fee = 0.01 * 10 ** 18; // (Varies by network and job)
     }
     
@@ -43,7 +44,7 @@ contract APIConsumer is ChainlinkClient {
      * Create a Chainlink request to retrieve API response, find the target
      * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
-    function requestVolumeData() public returns (bytes32 requestId) 
+    function requestData() public returns (bytes32 requestId) 
     {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         
@@ -65,8 +66,8 @@ contract APIConsumer is ChainlinkClient {
         request.add("path", "uris");
         
         // Multiply the result by 1000000000000000000 to remove decimals
-        int timesAmount = 10**18;
-        request.addInt("times", timesAmount);
+        // int timesAmount = 10**18;
+        // request.addInt("times", timesAmount);
         
         // Sends the request
         return sendChainlinkRequestTo(oracle, request, fee);
@@ -75,9 +76,9 @@ contract APIConsumer is ChainlinkClient {
     /**
      * Receive the response in the form of uint256
      */ 
-    function fulfill(bytes32 _requestId, uint256 _volume) public recordChainlinkFulfillment(_requestId)
+    function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId)
     {
-        volume = _volume;
+        response = _response;
     }
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
@@ -87,7 +88,7 @@ contract APIConsumer is ChainlinkClient {
         IERC20(linkAddress).transfer(msg.sender, balance);
     }
 
-    function getVolumeData() external view returns (uint256) {
-        return volume;
+    function getData() external view returns (bytes32) {
+        return response;
     }
 }

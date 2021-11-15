@@ -25,10 +25,10 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // Request volume data
-    // await icons.requestVolumeData();
+    await icons.requestData();
 
     // View the volume data
-    console.log(await icons.getVolumeData());
+    console.log(await icons.getData());
 }
 
 // We recommend this pattern to be able to use async/await everywhere
