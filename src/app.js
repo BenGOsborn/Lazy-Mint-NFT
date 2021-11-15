@@ -32,7 +32,8 @@ app.get("/generate", async (req, res) => {
     }
 
     // Return the uri
-    return res.json({ uris: uri });
+    // return res.json({ uris: uri });
+    return res.json({ uris: 23 });
 });
 
 // Start the server
