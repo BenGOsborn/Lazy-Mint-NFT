@@ -16,18 +16,23 @@ async function main() {
     // manually to make sure everything is compiled
     // await hre.run('compile');
 
+    // Initialize the signer
+    const signer = hre.ethers.provider.getSigner();
+
     // Initialize the contract
     const iconsAddress = fs.readFileSync("address.txt", "utf8");
-    const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, hre.ethers.provider);
+    const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, signer);
 
     // Fund the contract with LINK
     const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-    const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20ABI.abi, hre.ethers.provider);
-    await link.transfer(icons.address, 4e18);
+    const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20ABI.abi, signer);
+    await link.transfer(icons.address, (1e18).toString());
 
     // Mint a token
+    const NUM_TOKENS = 1;
+    await icons.earlyMintList(signer._address, NUM_TOKENS);
     const fee = await icons.mintFee();
-    await icons.earlyMint(1, { value: fee });
+    await icons.earlyMint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
 
     // View the minted NFT events
     icons.on("TransferSingle", (operator, from, to, id, value) => {
