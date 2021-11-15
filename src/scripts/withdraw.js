@@ -26,7 +26,7 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // Withdraw the MATIC and LINK from the contract
-    await icons.withdraw();
+    // await icons.withdraw();
     await icons.withdrawLink();
     console.log("Withdrew tokens from contract");
 }
