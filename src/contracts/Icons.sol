@@ -95,7 +95,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         _mintIcon(_amount);
     }
 
-    function _mintIcon(uint256 _amount) internal {
+    function _mintIcon(uint256 _amount) internal returns (bytes32) {
         // Verify the amount of tokens to mint is greater than 0
         require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
 
@@ -112,6 +112,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
             fulfilled: false
         });
         tokenId += _amount;
+        return requestId;
     }
     
     function fulfill(bytes32 _requestId, bytes32 _uri) external recordChainlinkFulfillment(_requestId) {
