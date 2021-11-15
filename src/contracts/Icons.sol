@@ -2,6 +2,7 @@
 pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * Request testnet LINK and ETH here: https://faucets.chain.link/
@@ -20,6 +21,8 @@ contract APIConsumer is ChainlinkClient {
     address private oracle;
     bytes32 private jobId;
     uint256 private fee;
+
+    address private linkAddress;
     
     /**
      * Network: Kovan
@@ -29,7 +32,8 @@ contract APIConsumer is ChainlinkClient {
      * Fee: 0.1 LINK
      */
     constructor() {
-        setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
+        linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
+        setChainlinkToken(linkAddress);
         oracle = 0x3A56aE4a2831C3d3514b5D7Af5578E45eBDb7a40;
         jobId = "3b7ca0d48c7a4b2da9268456665d11ae";
         fee = 0.01 * 10 ** 18; // (Varies by network and job)
@@ -75,4 +79,9 @@ contract APIConsumer is ChainlinkClient {
     }
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
+    function withdrawLink() external {
+        // Withdraw the balance of LINK to the sender
+        uint256 balance = IERC20(linkAddress).balanceOf(address(this));
+        IERC20(linkAddress).transfer(msg.sender, balance);
+    }
 }
