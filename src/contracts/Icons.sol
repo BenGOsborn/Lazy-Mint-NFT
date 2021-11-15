@@ -38,8 +38,8 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
     }
     mapping(bytes32 => MintRequest) private mintRequests;
 
-    constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
-                address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC1155(uri_) {
+    constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_, address linkAddress_) ERC1155(uri_) {
+    // constructor (uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_, address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC1155(uri_) {
         // Initialize contract data
         MAX_TOKENS = maxTokens_;
         mintFeePerToken = mintFeePerToken_; 
@@ -48,10 +48,14 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
 
         // Initialize chainlink data
         setChainlinkToken(linkAddress_);
-        oracle = oracle_;
-        jobId = jobId_;
-        linkFee = linkFee_;
-        apiUrl = apiUrl_;
+        // oracle = oracle_;
+        // jobId = jobId_;
+        // linkFee = linkFee_;
+        // apiUrl = apiUrl_;
+        oracle = 0x3A56aE4a2831C3d3514b5D7Af5578E45eBDb7a40;
+        jobId = "187bb80e5ee74a139734cac7475f3c6e";
+        linkFee = 1e16;
+        apiUrl = "https://lazy-nft.herokuapp.com/generate";
         linkAddress = linkAddress_;
     }
 
