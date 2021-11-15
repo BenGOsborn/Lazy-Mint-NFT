@@ -14,10 +14,10 @@ async function main() {
     // await hre.run('compile');
 
     // Contract parameters
-    const MINT_FEE_PER_TOKEN = "";
-    const MAX_TOKENS = "";
+    const MINT_FEE_PER_TOKEN = 10;
+    const MAX_TOKENS = 1000;
     const URI = "";
-    const EARLY_MINT_END = "";
+    const EARLY_MINT_END = Math.floor((Date.now() + 3.6e6) / 1000);
     const ORACLE = "";
     const JOB_ID = "";
     const LINK_FEE = "";
