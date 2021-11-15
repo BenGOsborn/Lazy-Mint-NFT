@@ -32,7 +32,7 @@ app.get("/generate", async (req, res) => {
     }
 
     // Return the uri
-    return res.send(uri);
+    return res.json({ uris: uri });
 });
 
 // Start the server
