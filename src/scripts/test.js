@@ -28,8 +28,8 @@ async function main() {
     // await icons.requestData();
 
     // View the volume data
-    const bytes = await icons.getData();
-    console.log(hre.ethers.utils.parseBytes32String(bytes));
+    const data = await icons.getData();
+    console.log(data);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
