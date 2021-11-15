@@ -27,14 +27,10 @@ module.exports = {
         matic: {
             url: "https://polygon-rpc.com/",
             accounts: [PRIVATE_KEY],
-            gas: 2100000,
-            gasPrice: 8000000000,
         },
         maticMumbai: {
             url: "https://rpc-mumbai.maticvigil.com/",
             accounts: [PRIVATE_KEY],
-            gas: 2100000,
-            gasPrice: 8000000000,
         },
     },
     solidity: {
