@@ -47,7 +47,7 @@ contract Icons is Ownable, ERC1155, ChainlinkClient {
         tokenId = 0;
 
         // Initialize chainlink data
-        setPublicChainlinkToken();
+        setChainlinkToken(linkAddress_);
         oracle = oracle_;
         jobId = jobId_;
         linkFee = linkFee_;
