@@ -13,13 +13,18 @@ async function main() {
     // manually to make sure everything is compiled
     // await hre.run('compile');
 
-    // We get the contract to deploy
-    const Greeter = await hre.ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, Hardhat!");
+    // Contract parameters
+    uint256 mintFeePerToken_, uint256 maxTokens_, string memory uri_, uint256 earlyMintEnd_,
+                address oracle_, bytes32 jobId_, uint256 linkFee_, bytes32 apiUrl_, address linkAddress_) ERC1155(uri_) {
 
-    await greeter.deployed();
+    // Compile and deploy the contract
+    await hre.run("compile");
+    const Icons = await hre.ethers.getContractFactory("Icons");
 
-    console.log("Greeter deployed to:", greeter.address);
+    const icons = await Greeter.deploy("Hello, Hardhat!");
+    await icons.deployed();
+
+    console.log("Contract deployed to:", icons.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
