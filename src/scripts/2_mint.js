@@ -21,9 +21,13 @@ async function main() {
     const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20Abi, hre.ethers.provider);
     await link.transfer(icons.address, 4e18);
 
+    // Initialize the contract
+
     // Mint a token
     const fee = await icons.mintFee();
     await icons.earlyMint(1, { value: fee });
+
+    // View the minted NFT events
 
     // Withdraw the MATIC and LINK from the contract
     await icons.withdraw();
