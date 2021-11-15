@@ -33,7 +33,7 @@ async function main() {
 
     // Mint a token
     const NUM_TOKENS = 1;
-    console.log(signer._address);
+    console.log(signer);
     await icons.earlyMintList(signer._address, NUM_TOKENS);
     console.log("Added owner to early mint list");
 
