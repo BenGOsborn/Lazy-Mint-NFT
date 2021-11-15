@@ -33,9 +33,9 @@ async function main() {
 
     // Mint a token
     const NUM_TOKENS = 1;
-    console.log(signer);
-    await icons.earlyMintList(signer._address, NUM_TOKENS);
-    console.log("Added owner to early mint list");
+    const minter = await signer.getAddress();
+    await icons.earlyMintList(minter, NUM_TOKENS);
+    console.log("Added " + minter + " to early mint list");
 
     const fee = await icons.mintFee();
     await icons.earlyMint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
