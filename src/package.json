@@ -8,7 +8,8 @@
         "deploy": "npx hardhat run --network maticMumbai scripts/deploy.js",
         "mint": "npx hardhat run --network maticMumbai scripts/mint.js",
         "withdraw": "npx hardhat run --network maticMumbai scripts/withdraw.js",
-        "fund": "npx hardhat run --network maticMumbai scripts/fund.js"
+        "fund": "npx hardhat run --network maticMumbai scripts/fund.js",
+        "test": "npx hardhat run --network maticMumbai scripts/test.js"
     },
     "devDependencies": {
         "@chainlink/contracts": "^0.2.2",
