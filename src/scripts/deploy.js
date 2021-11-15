@@ -38,6 +38,7 @@ async function main() {
     await link.transfer(icons.address, 4e18);
 
     // Make the transaction
+    // **** Code goes here
 
     // Withdraw the MATIC and LINK from the contract
     await icons.withdraw();
