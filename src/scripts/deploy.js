@@ -21,7 +21,7 @@ async function main() {
     const ORACLE = "0x0bDDCD124709aCBf9BB3F824EbC61C87019888bb";
     const JOB_ID = "c6a006e4f4844754a6524445acde84a0";
     const LINK_FEE = 0.1e18;
-    const API_URL = "";
+    const API_URL = "https://lazy-nft.herokuapp.com/generate";
     const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
 
     // Compile and deploy the contract
