@@ -4,7 +4,8 @@
     "scripts": {
         "build": "npx hardhat compile",
         "test": "npx hardhat test",
-        "server": "node app.js"
+        "server": "node app.js",
+        "deploy": "npx hardhat run --network maticMumbai scripts/deploy.js"
     },
     "devDependencies": {
         "@chainlink/contracts": "^0.2.2",
