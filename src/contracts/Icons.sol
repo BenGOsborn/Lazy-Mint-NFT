@@ -29,8 +29,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     uint256 private earlyMintEnd;
 
     struct MintRequest {
-        uint256 initialTokenId;
-        uint256 amount;
+        uint256 tokenId;
         address minter;
         string uri1;
         string uri2;
@@ -82,27 +81,42 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     // Mint the token if it is after the early minting phase
     function mint(uint256 _amount) external payable mintable {
         require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
-        _mintIcon(_amount);
+        _mintIcon();
     }
 
     // Mint a new Icon
-    function _mintIcon(uint256 _amount) internal {
-        // Verify the amount of tokens to mint is greater than 0
-        require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
-
+    function _mintIcon() internal {
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId, "&amount=", _amount)));
-        request.add("path", "uris");
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
+        request.add("path", "chunks.0");
 
         // Update the new current token id
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
         mintRequests[requestId] = MintRequest({
-            initialTokenId: tokenId,
-            amount: _amount,
+            tokenId: tokenId,
             minter: _msgSender(),
             fulfilled: false
         });
-        tokenId += _amount;
+    }
+
+    function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) returns (bytes32 requestId)
+    {
+        // **** How am I going to identify the one I am trying to mint through successive calls ?
+
+        response1 = _response;
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.end.selector);
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
+        request.add("path", "chunks.1");
+        return sendChainlinkRequestTo(oracle, request, fee);
+    }
+
+    function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) returns (bytes32 requestId)
+    {
+        response1 = _response;
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.end.selector);
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
+        request.add("path", "chunks.1");
+        return sendChainlinkRequestTo(oracle, request, fee);
     }
 }
