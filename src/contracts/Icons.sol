@@ -28,14 +28,18 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     mapping(address => bool) private earlyMinters;
     uint256 private earlyMintEnd;
 
-    struct MintRequest { // **** This system here is pretty broken with the first one not being updated - fix it
+    struct MintRequest {
         uint256 tokenId;
         address minter;
-        bytes uri;
+        bytes32 tempUri;
+        bool fulfilled;
+    }
+    struct MintRequestPtr {
+        bytes32 mintRequestPtr;
         bool fulfilled;
     }
     mapping(bytes32 => MintRequest) private mintRequests;
-    mapping(bytes32 => bytes32) private mintRequestPtrs;
+    mapping(bytes32 => MintRequestPtr) private mintRequestPtrs;
 
     constructor(string memory name_, string memory symbol_, uint256 maxTokens_, uint256 mintFee_, uint256 earlyMintEnd_,
                 address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC721(name_, symbol_) {
@@ -101,16 +105,14 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         mintRequests[requestId] = MintRequest({
             tokenId: tokenId,
             minter: _msgSender(),
-            uri1: "",
-            uri2: "",
-            fulfilled1: false,
-            fulfilled2: false
+            tempUri: "",
+            fulfilled: false
         });
     }
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
-        require(!mintRequests[_requestId].fulfilled1, "Icons: Request has already been fulfilled");
+        require(!mintRequests[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill2.selector);
@@ -119,22 +121,25 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
 
         // Update the mint request
-        mintRequests[_requestId].uri1 = _response;
-        mintRequests[_requestId].fulfilled1 = true;
-        mintRequests[requestId] = mintRequests[_requestId];
+        mintRequests[_requestId].tempUri = _response;
+        mintRequests[_requestId].fulfilled = true;
+        mintRequestPtrs[requestId] = MintRequestPtr({
+            mintRequestPtr: _requestId,
+            fulfilled: false
+        });
     }
 
     function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
-        require(!mintRequests[_requestId].fulfilled2, "Icons: Request has already been fulfilled"); // **** This is worthless anyway because we make a copy where the original isnt updated - what if we dont need to make a copy ?
+        require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled"); // **** This is worthless anyway because we make a copy where the original isnt updated - what if we dont need to make a copy ?
 
         // Update the mint request
-        mintRequests[_requestId].uri2 = _response;
-        mintRequests[_requestId].fulfilled2 = true;
+        mintRequestPtrs[_requestId].fulfilled = true;
+        bytes32 mintRequestPtr = mintRequestPtrs[_requestId].mintRequestPtr;
+        MintRequest memory mintRequest = mintRequests[mintRequestPtr];
 
         // Mint the new token
-        MintRequest memory mintRequest = mintRequests[_requestId];
-        _safeMint(mintRequest.minter, mintRequest.tokenId, abi.encodePacked(mintRequest.uri1, mintRequest.uri2));
+        _safeMint(mintRequest.minter, mintRequest.tokenId, abi.encodePacked(mintRequest.tempUri, _response));
         tokenId++;
     }
 
