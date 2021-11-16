@@ -20,8 +20,8 @@ describe("Test", function () {
     it("Should decode and encode properly", async function () {
         // Decode the data
         const decoded = bs58.decode(uri);
-        const prefix = `${decoded.slice(0, 2).toString("hex")}`;
-        const digest = `${decoded.slice(2).toString("hex")}`;
+        const digest = `0x${decoded.slice(2).toString("hex")}`;
+        const prefix = `0x${decoded.slice(0, 2).toString("hex")}`;
 
         // Reencode it
         let data = await contract.encodeData(digest, prefix);
