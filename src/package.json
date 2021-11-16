@@ -24,6 +24,7 @@
     "dependencies": {
         "@dicebear/avatars": "^4.10.1",
         "@dicebear/personas": "^4.10.1",
+        "bs58": "^4.0.1",
         "express": "^4.17.1",
         "ipfs-api": "^26.1.2"
     }

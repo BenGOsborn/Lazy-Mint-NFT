@@ -29,6 +29,7 @@ async function main() {
 
     // https://ethereum.stackexchange.com/questions/17094/how-to-store-ipfs-hash-using-bytes32
     // https://github.com/saurfang/ipfs-multihash-on-solidity/blob/master/contracts/IPFSStorage.sol
+    // https://github.com/MrChico/verifyIPFS/blob/master/contracts/verifyIPFS.sol#L28
 
     // **** The first 2 bytes are NOT necessary to store !
 
