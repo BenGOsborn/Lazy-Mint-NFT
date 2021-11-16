@@ -34,7 +34,7 @@ async function main() {
     // const icons = await Icons.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, LINK_ADDRESS);
     const exampleUri = "QmcPYGnhRrumj8WGSRMm9j1yaH8p2n1rYgTJeu4hyxBADA";
     const decodedUri = bs58.decode(exampleUri);
-    const prefix = hre.ethers.utils.hexZeroPad(`0x${decodedUri.slice(0, 2).toString("hex")}`);
+    const prefix = hre.ethers.utils.hexZeroPad(`0x${decodedUri.slice(0, 2).toString("hex")}`, 32);
     const icons = await Icons.deploy(prefix);
     await icons.deployed();
     console.log("Deployed contract " + icons.address);
