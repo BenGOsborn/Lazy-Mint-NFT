@@ -132,4 +132,16 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         MintRequest memory mintRequest = mintRequests[_requestId];
         _mint(mintRequest.minter, mintRequest.tokenId);
     }
+
+    // Withdraw the coins to the sender
+    function withdraw() external onlyOwner {
+        uint256 balance = address(this).balance;
+        payable(_msgSender()).transfer(balance);
+    }
+
+    // Withdraw the LINK to the sender
+    function withdrawLink() external onlyOwner {
+        uint256 balance = IERC20(linkAddress).balanceOf(address(this));
+        IERC20(linkAddress).transfer(_msgSender(), balance);
+    }
 }
