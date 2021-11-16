@@ -28,7 +28,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     mapping(address => bool) private earlyMinters;
     uint256 private earlyMintEnd;
 
-    struct MintRequest {
+    struct MintRequest { // **** This system here is pretty broken with the first one not being updated - fix it
         uint256 tokenId;
         address minter;
         bytes32 uri1;
@@ -80,7 +80,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     }
 
     // Mint the token if it is after the early minting phase
-    function mint(uint256 _amount) external payable mintable {
+    function mint() external payable mintable {
         require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
         _mintIcon();
     }
