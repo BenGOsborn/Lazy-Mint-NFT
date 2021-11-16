@@ -87,7 +87,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     // Mint a new Icon
     function _mintIcon() internal {
         // Initialize the request
-        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
         request.add("path", "chunks.0");
 
@@ -95,27 +95,21 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
         mintRequests[requestId] = MintRequest({
             tokenId: tokenId,
-            minter: _msgSender(),
-            fulfilled: false
+            minter: _msgSender()
         });
     }
 
-    function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) returns (bytes32 requestId)
-    {
-        // **** How am I going to identify the one I am trying to mint through successive calls ?
-
-        response1 = _response;
-        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.end.selector);
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
+    function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fullfill2.selector);
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
         request.add("path", "chunks.1");
-        return sendChainlinkRequestTo(oracle, request, fee);
+        bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
     }
 
     function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) returns (bytes32 requestId)
     {
-        response1 = _response;
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.end.selector);
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
         request.add("path", "chunks.1");
         return sendChainlinkRequestTo(oracle, request, fee);
     }
