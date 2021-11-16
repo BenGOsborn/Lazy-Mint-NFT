@@ -23,6 +23,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     uint256 private immutable MAX_TOKENS; 
     uint256 private immutable MINT_FEE; 
     uint256 private tokenId;
+    mapping(uint256 => string) private tokenUris;
 
     // Store token mint requests
     mapping(address => bool) private earlyMinters;
@@ -57,6 +58,18 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         linkAddress = linkAddress_;
     }
 
+    // Base URI for the metadata
+    function _baseURI() internal pure override returns (string memory) {
+        return "https://ipfs.io/ipfs/";
+    }
+
+    // Get the URI for a token
+    function tokenURI(uint256 _tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        return string(abi.encodePacked(_baseURI(), tokenUris[_tokenId]));
+    }
+
     // Verify the tokens may be minted
     modifier mintable() {
         require(tokenId + 1 < MAX_TOKENS, "Icons: Max number of tokens has already been reached");
@@ -88,11 +101,6 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         _mintIcon();
     }
 
-    // Base URI for the metadata
-    function _baseURI() internal pure override returns (string memory) {
-        return "https://ipfs.io/ipfs/";
-    }
-
     // Mint a new Icon
     function _mintIcon() internal {
         // Initialize the request
@@ -116,7 +124,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill2.selector);
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", mintRequests[_requestId].tokenId)));
         request.add("path", "chunks.1");
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
 
@@ -139,7 +147,9 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         MintRequest memory mintRequest = mintRequests[mintRequestPtr];
 
         // Mint the new token
-        _safeMint(mintRequest.minter, mintRequest.tokenId, abi.encodePacked(mintRequest.tempUri, _response));
+        bytes memory tokenUri = abi.encodePacked(mintRequest.tempUri, _response);
+        _safeMint(mintRequest.minter, mintRequest.tokenId, tokenUri);
+        tokenUris[mintRequest.tokenId] = tokenUri;
         tokenId++;
     }
 
