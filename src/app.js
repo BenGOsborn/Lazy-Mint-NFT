@@ -33,7 +33,8 @@ app.get("/generate", async (req, res) => {
     const digest = decoded.slice(2).toString("hex");
 
     // Return the uri
-    return res.json({ uri: ethers.utils.hexZeroPad(digest, 32) });
+    // return res.json({ uri: ethers.utils.hexZeroPad(digest, 32) });
+    return res.json({ uri: digest });
 });
 
 // Start the server
