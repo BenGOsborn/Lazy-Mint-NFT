@@ -34,9 +34,9 @@ async function main() {
     // **** The first 2 bytes are NOT necessary to store !
 
     // View the volume data
-    const data = await icons.getData();
+    // const data = await icons.getData();
     // const data = await icons.getParsedData();
-    // const data = await icons.getDataString();
+    const data = await icons.getDataString();
     console.log(data);
 }
 

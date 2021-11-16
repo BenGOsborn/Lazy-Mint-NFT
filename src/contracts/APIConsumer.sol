@@ -80,8 +80,20 @@ contract APIConsumer is ChainlinkClient {
     /**
      * Receive the response in the form of uint256
      */ 
-    function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId)
+    // function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId)
+    // {
+    //     response = _response;
+    // }
+
+    function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) returns (bytes32 requestId)
     {
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.end.selector);
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=1");
+        request.add("path", "uri");
+        return sendChainlinkRequestTo(oracle, request, fee);
+    }
+
+    function end(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         response = _response;
     }
 
