@@ -18,7 +18,7 @@ contract APIConsumer is ChainlinkClient {
     using Chainlink for Chainlink.Request;
   
     // uint256 public volume;
-    string private ipfsHash;
+    bytes32 private response;
     bytes32 private prefix;
     
     address private oracle;
@@ -82,8 +82,7 @@ contract APIConsumer is ChainlinkClient {
      */ 
     function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId)
     {
-        bytes memory encoded = verifyIPFS.toBase58(abi.encodePacked(prefix, _response));
-        ipfsHash = string(abi.encodePacked(encoded));
+        response = _response;
     }
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
@@ -93,7 +92,12 @@ contract APIConsumer is ChainlinkClient {
         IERC20(linkAddress).transfer(msg.sender, balance);
     }
 
-    function getData() external view returns (string memory) {
-        return string(abi.encodePacked(ipfsHash));
+    function getParsedData() external view returns (string memory) {
+        bytes memory encoded = verifyIPFS.toBase58(abi.encodePacked(prefix, response));
+        return string(abi.encodePacked(encoded));
+    }
+
+    function getData() external view returns (bytes32) {
+        return response;
     }
 }
