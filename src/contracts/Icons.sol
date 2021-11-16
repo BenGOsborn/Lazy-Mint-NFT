@@ -85,6 +85,11 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         _mintIcon();
     }
 
+    // Base URI for the metadata
+    function _baseURI() internal pure override returns (string memory) {
+        return "https://ipfs.io/ipfs/";
+    }
+
     // Mint a new Icon
     function _mintIcon() internal {
         // Initialize the request
@@ -130,10 +135,8 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
         // Mint the new token
         MintRequest memory mintRequest = mintRequests[_requestId];
-        _mint(mintRequest.minter, mintRequest.tokenId);
+        _safeMint(mintRequest.minter, mintRequest.tokenId, abi.encodePacked(mintRequest.uri1, mintRequest.uri2));
         tokenId++;
-
-        // **** Dont forget to add the metadata uri to the token as well !!!
     }
 
     // Withdraw the coins to the sender
