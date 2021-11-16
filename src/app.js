@@ -30,7 +30,7 @@ app.get("/generate", async (req, res) => {
     // Break the URI up into different parts
     const chunks = [];
     const CHUNK_SIZE = 32;
-    for (let i = 0; i < Math.floor((uri.length - 1) / 32); i++) {
+    for (let i = 0; i < Math.floor(uri.length / 32); i++) {
         chunks.push(uri.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE));
     }
 
