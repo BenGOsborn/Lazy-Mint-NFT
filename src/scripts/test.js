@@ -31,13 +31,11 @@ async function main() {
     // https://github.com/saurfang/ipfs-multihash-on-solidity/blob/master/contracts/IPFSStorage.sol
     // https://github.com/MrChico/verifyIPFS/blob/master/contracts/verifyIPFS.sol#L28
 
-    // **** The first 2 bytes are NOT necessary to store !
-
     // View the volume data
-    const data = await icons.getData();
-    // const data = await icons.getParsedData();
-    // const data = await icons.getDataString();
-    console.log(data);
+    const dataRaw = await icons.getData();
+    const dataString = await icons.getDataString();
+    console.log(dataRaw);
+    console.log(dataString);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
