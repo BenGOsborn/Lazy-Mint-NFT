@@ -27,6 +27,10 @@ async function main() {
     // Request volume data
     // await icons.requestData();
 
+    // https://ethereum.stackexchange.com/questions/17094/how-to-store-ipfs-hash-using-bytes32
+
+    // **** The first 2 bytes are NOT necessary to store !
+
     // View the volume data
     const data = await icons.getData();
     console.log(data);
