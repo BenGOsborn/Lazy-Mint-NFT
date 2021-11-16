@@ -8,8 +8,6 @@ describe("Test", function () {
     let contract;
 
     const uri = "QmcPYGnhRrumj8WGSRMm9j1yaH8p2n1rYgTJeu4hyxBADA";
-    const decoded = bs58.decode(uri);
-    const digest = `0x${decoded.slice(2).toString("hex")}`;
 
     beforeEach(async () => {
         // Deploy the contract
@@ -20,9 +18,14 @@ describe("Test", function () {
     });
 
     it("Should decode and encode properly", async function () {
-        let data = await contract.decodeData(digest);
+        // Decode the data
+        const decoded = bs58.decode(uri);
+        const prefix = `0x${decoded.slice(0, 2).toString("hex")}`;
+        const digest = `0x${decoded.slice(2).toString("hex")}`;
+
+        // Reencode it
+        let data = await contract.encodeData(digest, prefix);
         console.log(data);
-        console.log(`First 2 bytes: 0x${decoded.slice(0, 2).toString("hex")}`);
 
         // **** All I really have to do is store those bytes, and then add them on
         // **** How do I convert hex to a string manually ?
