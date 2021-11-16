@@ -30,7 +30,7 @@ describe("Test", function () {
 
         // Reencode it
         let data = await contract.encodeData(padHex(digest), padHex(prefix));
-        console.log(data);
+        expect(data).to.equal(uri);
 
         // **** All I really have to do is store those bytes, and then add them on
         // **** How do I convert hex to a string manually ?
