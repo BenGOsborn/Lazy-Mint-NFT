@@ -21,11 +21,11 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
     // Token data
     uint256 private immutable MAX_TOKENS; 
-    uint256 private immutable MINT_FEE_PER_TOKEN; 
+    uint256 private immutable MINT_FEE; 
     uint256 private tokenId;
 
     // Store token mint requests
-    mapping(address => uint256) private earlyMinters;
+    mapping(address => bool) private earlyMinters;
     uint256 private earlyMintEnd;
 
     struct MintRequest {
@@ -38,11 +38,11 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     }
     mapping(bytes32 => MintRequest) private mintRequests;
 
-    constructor(string memory name_, string memory symbol_, uint256 maxTokens_, uint256 mintFeePerToken_, uint256 earlyMintEnd_,
+    constructor(string memory name_, string memory symbol_, uint256 maxTokens_, uint256 mintFee_, uint256 earlyMintEnd_,
                 address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC721(name_, symbol_) {
         // Initialize data
         MAX_TOKENS = maxTokens_; 
-        MINT_FEE_PER_TOKEN = mintFeePerToken_;
+        MINT_FEE = mintFee_;
         earlyMintEnd = earlyMintEnd_;
 
         // Initialize Chainlink data
@@ -52,5 +52,57 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         linkFee = linkFee_;
         apiUrl = apiUrl_;
         linkAddress = linkAddress_;
+    }
+
+    // Verify the tokens may be minted
+    modifier mintable() {
+        require(tokenId + 1 < MAX_TOKENS, "Icons: Max number of tokens has already been reached");
+        require(msg.value >= MINT_FEE || _msgSender() == owner(), "Icons: Not enough funds to mint token");
+        _;
+    }
+
+    // Return the mint fee
+    function getMintFee() external view returns (uint256) {
+        return MINT_FEE;
+    }
+
+    // Authorize a user to early mint
+    function addEarlyMinter(address _address) external onlyOwner {
+        earlyMinters[_address] = true;
+    }
+
+    // Mint the token if the user is approved and it is still in the early mint phase
+    function earlyMint() external payable mintable {
+        require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
+        require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
+        earlyMinters[_msgSender()] = false;
+        _mintIcon();
+    }
+
+    // Mint the token if it is after the early minting phase
+    function mint(uint256 _amount) external payable mintable {
+        require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
+        _mintIcon(_amount);
+    }
+
+    // Mint a new Icon
+    function _mintIcon(uint256 _amount) internal {
+        // Verify the amount of tokens to mint is greater than 0
+        require(_amount > 0, "Icons: Amount of tokens must be greater then 0");
+
+        // Initialize the request
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId, "&amount=", _amount)));
+        request.add("path", "uris");
+
+        // Update the new current token id
+        bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
+        mintRequests[requestId] = MintRequest({
+            initialTokenId: tokenId,
+            amount: _amount,
+            minter: _msgSender(),
+            fulfilled: false
+        });
+        tokenId += _amount;
     }
 }
