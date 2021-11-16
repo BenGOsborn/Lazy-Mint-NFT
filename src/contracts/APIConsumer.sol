@@ -100,4 +100,8 @@ contract APIConsumer is ChainlinkClient {
     function getData() external view returns (bytes32) {
         return response;
     }
+
+    function getDataString() external view returns (string memory) {
+        return string(abi.encodePacked(response));
+    }
 }
