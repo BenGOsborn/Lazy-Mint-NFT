@@ -25,7 +25,7 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // Request volume data
-    await icons.requestData();
+    // await icons.requestData();
 
     // https://ethereum.stackexchange.com/questions/17094/how-to-store-ipfs-hash-using-bytes32
     // https://github.com/saurfang/ipfs-multihash-on-solidity/blob/master/contracts/IPFSStorage.sol

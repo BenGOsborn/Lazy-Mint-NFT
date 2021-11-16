@@ -27,14 +27,15 @@ app.get("/generate", async (req, res) => {
         return res.status(400).end(err);
     }
 
-    // Encode the URI
-    const decoded = bs58.decode(uri);
-    // const digest = `0x${decoded.slice(2).toString("hex")}`;
-    const digest = decoded.slice(2).toString("hex");
+    // Break the URI up into different parts
+    const chunks = [];
+    const CHUNK_SIZE = 32;
+    for (let i = 0; i < Math.floor((uri.length - 1) / 32); i++) {
+        chunks.push(uri.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE));
+    }
 
-    // Return the uri
-    // return res.json({ uri: ethers.utils.hexZeroPad(digest, 32) });
-    return res.json({ uri: digest });
+    // Return the URI chunks
+    return res.json({ uri: chunks });
 });
 
 // Start the server
