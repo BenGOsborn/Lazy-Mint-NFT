@@ -17,6 +17,10 @@ describe("Test", function () {
         await contract.deployed();
     });
 
+    function padHex(raw) {
+        return ethers.utils.hexZeroPad(raw, 32);
+    }
+
     it("Should decode and encode properly", async function () {
         // Decode the data
         const decoded = bs58.decode(uri);
@@ -24,7 +28,7 @@ describe("Test", function () {
         const prefix = `0x${decoded.slice(0, 2).toString("hex")}`;
 
         // Reencode it
-        let data = await contract.encodeData(digest, prefix);
+        let data = await contract.encodeData(padHex(digest), padHex(prefix));
         console.log(data);
 
         // **** All I really have to do is store those bytes, and then add them on
