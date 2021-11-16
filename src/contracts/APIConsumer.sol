@@ -5,15 +5,6 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./lib/verifyIPFS.sol";
 
-/**
- * Request testnet LINK and ETH here: https://faucets.chain.link/
- * Find information on LINK Token Contracts and get the latest ETH and LINK faucets here: https://docs.chain.link/docs/link-token-contracts/
- */
-
-/**
- * THIS IS AN EXAMPLE CONTRACT WHICH USES HARDCODED VALUES FOR CLARITY.
- * PLEASE DO NOT USE THIS CODE IN PRODUCTION.
- */
 contract APIConsumer is ChainlinkClient {
     using Chainlink for Chainlink.Request;
   
@@ -28,13 +19,6 @@ contract APIConsumer is ChainlinkClient {
 
     address private linkAddress;
     
-    /**
-     * Network: Kovan
-     * Oracle: 0xc57B33452b4F7BB189bB5AfaE9cc4aBa1f7a4FD8 (Chainlink Devrel   
-     * Node)
-     * Job ID: d5270d1c311941d0b08bead21fea7747
-     * Fee: 0.1 LINK
-     */
     constructor(bytes32 prefix_) {
         prefix = prefix_;
 
@@ -45,10 +29,6 @@ contract APIConsumer is ChainlinkClient {
         fee = 0.01 * 10 ** 18; // (Varies by network and job)
     }
     
-    /**
-     * Create a Chainlink request to retrieve API response, find the target
-     * data, then multiply by 1000000000000000000 (to remove decimal places from data).
-     */
     function requestData() public returns (bytes32 requestId) 
     {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
