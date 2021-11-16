@@ -31,12 +31,11 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     struct MintRequest { // **** This system here is pretty broken with the first one not being updated - fix it
         uint256 tokenId;
         address minter;
-        bytes32 uri1;
-        bytes32 uri2;
-        bool fulfilled1;
-        bool fulfilled2; // **** Is this one really necessary ?
+        bytes uri;
+        bool fulfilled;
     }
     mapping(bytes32 => MintRequest) private mintRequests;
+    mapping(bytes32 => bytes32) private mintRequestPtrs;
 
     constructor(string memory name_, string memory symbol_, uint256 maxTokens_, uint256 mintFee_, uint256 earlyMintEnd_,
                 address oracle_, bytes32 jobId_, uint256 linkFee_, string memory apiUrl_, address linkAddress_) ERC721(name_, symbol_) {
