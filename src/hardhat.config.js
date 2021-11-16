@@ -9,7 +9,6 @@ require("dotenv").config();
  */
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const INFURA_KEY = process.env.INFURA_KEY;
 
 module.exports = {
     solidity: "0.8.4",
@@ -21,10 +20,6 @@ module.exports = {
         },
         maticMumbai: {
             url: "https://rpc-mumbai.maticvigil.com/",
-            accounts: [PRIVATE_KEY],
-        },
-        kovan: {
-            url: `https://kovan.infura.io/v3/${INFURA_KEY}`,
             accounts: [PRIVATE_KEY],
         },
     },

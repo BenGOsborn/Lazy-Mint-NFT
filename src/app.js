@@ -2,8 +2,6 @@ const app = require("express")();
 const { createAvatar } = require("@dicebear/avatars");
 const style = require("@dicebear/personas");
 const ipfsAPI = require("ipfs-api");
-const bs58 = require("bs58");
-const ethers = require("ethers");
 
 // Initialize IPFS
 const ipfs = ipfsAPI("ipfs.infura.io", "5001", { protocol: "https" });
