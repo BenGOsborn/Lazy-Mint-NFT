@@ -47,7 +47,6 @@ async function main() {
 
     // Fund the contract with LINK
     const signer = hre.ethers.provider.getSigner();
-    const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
     const link = new hre.ethers.Contract(LINK_ADDRESS, ERC20ABI.abi, signer);
     await link.transfer(icons.address, (1e18).toString());
     console.log("Initialized LINK contract and sent LINK tokens");
