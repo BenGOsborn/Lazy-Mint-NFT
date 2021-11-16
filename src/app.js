@@ -2,7 +2,6 @@ const app = require("express")();
 const { createAvatar } = require("@dicebear/avatars");
 const style = require("@dicebear/personas");
 const ipfsAPI = require("ipfs-api");
-const bs58 = require("bs58");
 
 // Initialize IPFS
 const ipfs = ipfsAPI("ipfs.infura.io", "5001", { protocol: "https" });
@@ -33,13 +32,6 @@ app.get("/generate", async (req, res) => {
 });
 
 // Start the server
-// app.listen(process.env.PORT || 5000, () => {
-//     console.log("Started server...");
-// });
-
-// **** DONT FORGET TO INSTALL ETHERS IN PRODUCTION
-
-const uri = "QmcPYGnhRrumj8WGSRMm9j1yaH8p2n1rYgTJeu4hyxBADA";
-const decoded = bs58.decode(uri);
-const digest = `0x${decoded.slice(2).toString("hex")}`;
-console.log(digest);
+app.listen(process.env.PORT || 5000, () => {
+    console.log("Started server...");
+});
