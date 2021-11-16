@@ -26,6 +26,7 @@ describe("Test", function () {
         const decoded = bs58.decode(uri);
         const digest = `0x${decoded.slice(2).toString("hex")}`;
         const prefix = `0x${decoded.slice(0, 2).toString("hex")}`;
+        console.log(prefix);
 
         // Reencode it
         let data = await contract.encodeData(padHex(digest), padHex(prefix));
