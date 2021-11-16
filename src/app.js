@@ -29,7 +29,8 @@ app.get("/generate", async (req, res) => {
 
     // Encode the URI
     const decoded = bs58.decode(uri);
-    const digest = `0x${decoded.slice(2).toString("hex")}`;
+    // const digest = `0x${decoded.slice(2).toString("hex")}`;
+    const digest = decoded.slice(2).toString("hex");
 
     // Return the uri
     return res.json({ uri: ethers.utils.hexZeroPad(digest, 32) });
