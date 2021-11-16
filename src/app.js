@@ -3,6 +3,7 @@ const { createAvatar } = require("@dicebear/avatars");
 const style = require("@dicebear/personas");
 const ipfsAPI = require("ipfs-api");
 const bs58 = require("bs58");
+const ethers = require("ethers");
 
 // Initialize IPFS
 const ipfs = ipfsAPI("ipfs.infura.io", "5001", { protocol: "https" });
@@ -31,7 +32,7 @@ app.get("/generate", async (req, res) => {
     const digest = `0x${decoded.slice(2).toString("hex")}`;
 
     // Return the uri
-    return res.json({ uri: digest });
+    return res.json({ uri: ethers.utils.hexZeroPad(digest, 32) });
 });
 
 // Start the server
