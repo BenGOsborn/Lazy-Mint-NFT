@@ -78,16 +78,11 @@ contract APIConsumer is ChainlinkClient {
         IERC20(linkAddress).transfer(msg.sender, balance);
     }
 
-    function getParsedData() external view returns (string memory) {
-        bytes memory encoded = verifyIPFS.toBase58(abi.encodePacked(prefix, response));
-        return string(abi.encodePacked(encoded));
-    }
-
     function getData() external view returns (bytes32, bytes32) {
-        return response1, response2;
+        return (response1, response2);
     }
 
     function getDataString() external view returns (string memory) {
-        return string(abi.encodePacked(response));
+        return string(abi.encodePacked(response1, response2));
     }
 }
