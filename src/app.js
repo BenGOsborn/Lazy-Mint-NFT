@@ -33,7 +33,6 @@ app.get("/generate", async (req, res) => {
     for (let i = 0; i < Math.floor((uri.length - 1) / CHUNK_SIZE) + 1; i++) {
         chunks.push(uri.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE));
     }
-    console.log(Math.floor(uri.length / CHUNK_SIZE));
 
     // Return the URI chunks
     return res.json({ chunks, uri });
