@@ -131,6 +131,9 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         // Mint the new token
         MintRequest memory mintRequest = mintRequests[_requestId];
         _mint(mintRequest.minter, mintRequest.tokenId);
+        tokenId++;
+
+        // **** Dont forget to add the metadata uri to the token as well !!!
     }
 
     // Withdraw the coins to the sender
