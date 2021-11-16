@@ -1,19 +1,32 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
+const bs58 = require("bs58");
 
 describe("Test", function () {
     let Contract;
     let signer;
     let contract;
 
+    const uri = "QmcPYGnhRrumj8WGSRMm9j1yaH8p2n1rYgTJeu4hyxBADA";
+    const decoded = bs58.decode(uri);
+    const digest = `0x${decoded.slice(2).toString("hex")}`;
+
     beforeEach(async () => {
         // Deploy the contract
         Contract = await ethers.getContractFactory("Test");
         signer = await ethers.getSigner();
         contract = await Contract.deploy();
+        await contract.deployed();
     });
 
     it("Should decode and encode properly", async function () {
+        let data = await contract.decodeData(digest);
+        console.log(data);
+        console.log(`First 2 bytes: 0x${decoded.slice(0, 2).toString("hex")}`);
+
+        // **** All I really have to do is store those bytes, and then add them on
+        // **** How do I convert hex to a string manually ?
+
         // const Greeter = await ethers.getContractFactory("Greeter");
         // const greeter = await Greeter.deploy("Hello, world!");
         // await greeter.deployed();
