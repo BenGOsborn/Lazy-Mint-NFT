@@ -54,7 +54,7 @@ contract APIConsumer is ChainlinkClient {
         
         // Set the URL to perform the GET request on
         // request.add("get", "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD");
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=2&amount=3");
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=1");
         
         // Set the path to find the desired data in the API response, where the response format is:
         // {"RAW":
