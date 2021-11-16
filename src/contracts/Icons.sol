@@ -131,7 +131,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
     function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
-        require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled"); // **** This is worthless anyway because we make a copy where the original isnt updated - what if we dont need to make a copy ?
+        require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
         // Update the mint request
         mintRequestPtrs[_requestId].fulfilled = true;
