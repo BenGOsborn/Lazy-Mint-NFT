@@ -5,6 +5,7 @@
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 const fs = require("fs");
+const bs58 = require("bs58");
 
 async function main() {
     // Hardhat always runs the compile task when running scripts with its command
@@ -31,7 +32,10 @@ async function main() {
     const Icons = await hre.ethers.getContractFactory("APIConsumer");
     // const icons = await Icons.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, ORACLE, JOB_ID, LINK_FEE, API_URL, LINK_ADDRESS);
     // const icons = await Icons.deploy(MINT_FEE_PER_TOKEN, MAX_TOKENS, URI, EARLY_MINT_END, LINK_ADDRESS);
-    const icons = await Icons.deploy();
+    const exampleUri = "QmcPYGnhRrumj8WGSRMm9j1yaH8p2n1rYgTJeu4hyxBADA";
+    const decodedUri = bs58.decode(exampleUri);
+    const prefix = hre.ethers.utils.hexZeroPad(`0x${decodedUri.slice(0, 2).toString("hex")}`);
+    const icons = await Icons.deploy(prefix);
     await icons.deployed();
     console.log("Deployed contract " + icons.address);
 
