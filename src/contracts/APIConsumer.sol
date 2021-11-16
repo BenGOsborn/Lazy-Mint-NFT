@@ -18,7 +18,8 @@ contract APIConsumer is ChainlinkClient {
     using Chainlink for Chainlink.Request;
   
     // uint256 public volume;
-    bytes32 private response;
+    bytes32 private response1;
+    bytes32 private response2;
     bytes32 private prefix;
     
     address private oracle;
@@ -52,49 +53,22 @@ contract APIConsumer is ChainlinkClient {
     {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill.selector);
         
-        // Set the URL to perform the GET request on
-        // request.add("get", "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD");
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=1");
-        
-        // Set the path to find the desired data in the API response, where the response format is:
-        // {"RAW":
-        //   {"ETH":
-        //    {"USD":
-        //     {
-        //      "VOLUME24HOUR": xxx.xxx,
-        //     }
-        //    }
-        //   }
-        //  }
-        // request.add("path", "RAW.ETH.USD.VOLUME24HOUR");
-        request.add("path", "uri");
-        
-        // Multiply the result by 1000000000000000000 to remove decimals
-        // int timesAmount = 10**18;
-        // request.addInt("times", timesAmount);
-        
-        // Sends the request
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
+        request.add("path", "chunks.0");
         return sendChainlinkRequestTo(oracle, request, fee);
     }
-    
-    /**
-     * Receive the response in the form of uint256
-     */ 
-    // function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId)
-    // {
-    //     response = _response;
-    // }
 
     function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) returns (bytes32 requestId)
     {
+        response1 = _response;
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.end.selector);
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=2");
-        request.add("path", "uri");
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
+        request.add("path", "chunks.1");
         return sendChainlinkRequestTo(oracle, request, fee);
     }
 
     function end(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
-        response = _response;
+        response2 = _response;
     }
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
@@ -109,8 +83,8 @@ contract APIConsumer is ChainlinkClient {
         return string(abi.encodePacked(encoded));
     }
 
-    function getData() external view returns (bytes32) {
-        return response;
+    function getData() external view returns (bytes32, bytes32) {
+        return response1, response2;
     }
 
     function getDataString() external view returns (string memory) {
