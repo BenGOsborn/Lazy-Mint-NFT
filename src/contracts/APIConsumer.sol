@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./lib/verifyIPFS.sol";
 
 /**
  * Request testnet LINK and ETH here: https://faucets.chain.link/
@@ -17,7 +18,8 @@ contract APIConsumer is ChainlinkClient {
     using Chainlink for Chainlink.Request;
   
     // uint256 public volume;
-    bytes32 private response;
+    string private ipfsHash;
+    bytes32 private prefix;
     
     address private oracle;
     bytes32 private jobId;
@@ -32,7 +34,9 @@ contract APIConsumer is ChainlinkClient {
      * Job ID: d5270d1c311941d0b08bead21fea7747
      * Fee: 0.1 LINK
      */
-    constructor() {
+    constructor(bytes32 prefix_) {
+        prefix = prefix_;
+
         linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
         setChainlinkToken(linkAddress);
         oracle = 0xc8D925525CA8759812d0c299B90247917d4d4b7C;
@@ -63,7 +67,7 @@ contract APIConsumer is ChainlinkClient {
         //   }
         //  }
         // request.add("path", "RAW.ETH.USD.VOLUME24HOUR");
-        request.add("path", "uris");
+        request.add("path", "uri");
         
         // Multiply the result by 1000000000000000000 to remove decimals
         // int timesAmount = 10**18;
@@ -78,7 +82,8 @@ contract APIConsumer is ChainlinkClient {
      */ 
     function fulfill(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId)
     {
-        response = _response;
+        bytes memory encoded = verifyIPFS.toBase58(abi.encodePacked(prefix, _response));
+        ipfsHash = string(abi.encodePacked(encoded));
     }
 
     // function withdrawLink() external {} - Implement a withdraw function to avoid locking your LINK in the contract
@@ -89,6 +94,6 @@ contract APIConsumer is ChainlinkClient {
     }
 
     function getData() external view returns (string memory) {
-        return string(abi.encodePacked(response));
+        return string(abi.encodePacked(ipfsHash));
     }
 }
