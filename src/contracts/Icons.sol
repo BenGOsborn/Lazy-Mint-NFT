@@ -89,12 +89,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
         require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
         earlyMinters[_msgSender()] = false;
-        // _mintIcon();
-
-        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
-        request.add("path", "chunks.0");
-        sendChainlinkRequestTo(oracle, request, linkFee);
+        _mintIcon();
     }
 
     // Mint the token if it is after the early minting phase
