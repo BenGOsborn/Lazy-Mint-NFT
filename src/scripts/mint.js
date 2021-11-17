@@ -20,11 +20,6 @@ async function main() {
     await icons.earlyMint({ value: fee }); // If early mint period has ended, comment this line and uncomment the next line
     // await icons.mint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
     console.log("Minted token");
-
-    // View the minted NFT events
-    icons.on("TransferSingle", (operator, from, to, id, value) => {
-        console.log(operator, from, to, id, value);
-    });
 }
 
 main()
