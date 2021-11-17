@@ -13,6 +13,8 @@ async function main() {
     // View the minted NFTs
     icons.on("TransferSingle", (from, to, tokenId) => {
         console.log(from, to, tokenId);
+
+        // **** Also log the metadata of the tokens
     });
 }
 
