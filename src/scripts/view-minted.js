@@ -11,7 +11,7 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // View the minted NFTs
-    icons.on("TransferSingle", (from, to, tokenId) => {
+    icons.on("Transfer", (from, to, tokenId) => {
         console.log(from, to, tokenId);
 
         // **** Also log the metadata of the tokens
