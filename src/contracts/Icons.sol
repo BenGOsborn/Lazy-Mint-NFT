@@ -9,6 +9,7 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 
 contract Icons is Ownable, ERC721, ChainlinkClient {
     using Chainlink for Chainlink.Request;
+    using Strings for uint256;
 
     // Chainlink data
     address private oracle;
@@ -108,7 +109,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     function requestData() public {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
         // request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
         request.add("path", "chunks.0");
         sendChainlinkRequestTo(oracle, request, linkFee);
     }
