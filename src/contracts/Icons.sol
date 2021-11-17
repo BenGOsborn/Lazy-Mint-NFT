@@ -128,21 +128,21 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
-        // require(!mintRequests[_requestId].fulfilled, "Icons: Request has already been fulfilled");
+        require(!mintRequests[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
         // Initialize the request
-        // Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill2.selector);
-        // request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", mintRequests[_requestId].tokenId))); // **** Maybe this needs to be 'toString' ?
-        // request.add("path", "chunks.1");
-        // bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill2.selector);
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", mintRequests[_requestId].tokenId))); // **** Maybe this needs to be 'toString' ?
+        request.add("path", "chunks.1");
+        bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
 
         // Update the mint request
-        // mintRequests[_requestId].tempUri = _response;
-        // mintRequests[_requestId].fulfilled = true;
-        // mintRequestPtrs[requestId] = MintRequestPtr({
-        //     mintRequestPtr: _requestId,
-        //     fulfilled: false
-        // });
+        mintRequests[_requestId].tempUri = _response;
+        mintRequests[_requestId].fulfilled = true;
+        mintRequestPtrs[requestId] = MintRequestPtr({
+            mintRequestPtr: _requestId,
+            fulfilled: false
+        });
     }
 
     function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
