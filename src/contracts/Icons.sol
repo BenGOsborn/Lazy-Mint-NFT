@@ -29,6 +29,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     uint256 private earlyMintEnd;
 
     struct MintRequest {
+        bool initiated;
         uint256 tokenId;
         address minter;
         bytes32 tempUri;
@@ -119,6 +120,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         request.add("path", "chunks.0");
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
         mintRequests[requestId] = MintRequest({
+            initiated: true,
             tokenId: tokenId,
             minter: _msgSender(),
             tempUri: "",
@@ -128,6 +130,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
+        require(mintRequests[_requestId].initiated, "Icons: Mint request has not been initiated");
         require(!mintRequests[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
         // Initialize the request
@@ -152,6 +155,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         // Mint the new token
         bytes32 mintRequestPtr = mintRequestPtrs[_requestId].mintRequestPtr;
         MintRequest memory mintRequest = mintRequests[mintRequestPtr];
+        require(mintRequest.initiated, "Icons: Mint request has not been initiated");
 
         bytes memory tokenUri = abi.encodePacked(mintRequest.tempUri, _response);
         _safeMint(mintRequest.minter, mintRequest.tokenId, tokenUri);
