@@ -96,7 +96,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     // **** Try and merge back into one single function that is used by both ?
 
     // Mint the token if the user is approved and it is still in the early mint phase
-    function earlyMint() external {
+    function earlyMint() external payable {
         // Requirements
         require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
         require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
