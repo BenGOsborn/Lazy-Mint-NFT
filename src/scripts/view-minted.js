@@ -18,6 +18,10 @@ async function main() {
     for (const event of events) {
         console.log(event.args);
     }
+
+    // Get the metadata
+    const metadata = await icons.tokenURI(0);
+    console.log(metadata);
 }
 
 main()
