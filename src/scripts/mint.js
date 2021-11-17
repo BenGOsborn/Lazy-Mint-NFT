@@ -18,8 +18,8 @@ async function main() {
     // Mint a token
     const fee = await icons.getMintFee();
     // await icons.earlyMint({ value: fee }); // If early mint period has ended, comment this line and uncomment the next line
-    // await icons.earlyMint(); // If early mint period has ended, comment this line and uncomment the next line
-    await icons.requestData(); // If early mint period has ended, comment this line and uncomment the next line
+    await icons.earlyMint(); // If early mint period has ended, comment this line and uncomment the next line
+    // await icons.requestData(); // If early mint period has ended, comment this line and uncomment the next line
     // await icons.mint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
     console.log("Minted token");
 }
