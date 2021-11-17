@@ -101,9 +101,31 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
         require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
 
-        // // Update mint status
+        // Update mint status
         earlyMinters[_msgSender()] = false;
 
+        // Call mint
+        _mintIcon();
+
+        // Call the request
+        // Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
+        // request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
+        // request.add("path", "chunks.0");
+        // bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
+        // mintRequests[requestId] = MintRequest({
+        //     tokenId: tokenId,
+        //     minter: _msgSender(),
+        //     tempUri: "",
+        //     fulfilled: false
+        // });
+    }
+
+    // Mint the token if it is after the early minting phase
+    function mint() external payable mintable {
+        require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
+    }
+
+    function _mintIcon() internal {
         // Call the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
@@ -115,11 +137,6 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
             tempUri: "",
             fulfilled: false
         });
-    }
-
-    // Mint the token if it is after the early minting phase
-    function mint() external payable mintable {
-        require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
     }
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
