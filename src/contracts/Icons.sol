@@ -102,8 +102,10 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     function _mintIcon() internal {
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
+        // request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
+        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
         request.add("path", "chunks.0");
+        sendChainlinkRequestTo(oracle, request, linkFee);
 
         // Update the new current token id
         // bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
