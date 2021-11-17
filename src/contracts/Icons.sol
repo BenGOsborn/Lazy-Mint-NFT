@@ -96,23 +96,23 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     // Mint the token if the user is approved and it is still in the early mint phase
     function earlyMint() external {
         // Requirements
-        require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
-        require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
+        // require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
+        // require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
 
-        // Update mint status
-        earlyMinters[_msgSender()] = false;
+        // // Update mint status
+        // earlyMinters[_msgSender()] = false;
 
         // Call the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
         request.add("path", "chunks.0");
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
-        mintRequests[requestId] = MintRequest({
-            tokenId: tokenId,
-            minter: _msgSender(),
-            tempUri: "",
-            fulfilled: false
-        });
+        // mintRequests[requestId] = MintRequest({
+        //     tokenId: tokenId,
+        //     minter: _msgSender(),
+        //     tempUri: "",
+        //     fulfilled: false
+        // });
     }
 
     // Mint the token if it is after the early minting phase
