@@ -121,12 +121,12 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
     }
 
-    // function requestData() external {
-    //     Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
-    //     request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
-    //     request.add("path", "chunks.0");
-    //     sendChainlinkRequestTo(oracle, request, linkFee);
-    // }
+    function requestData() external {
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
+        request.add("path", "chunks.0");
+        sendChainlinkRequestTo(oracle, request, linkFee);
+    }
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
