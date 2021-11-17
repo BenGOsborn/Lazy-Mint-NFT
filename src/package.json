@@ -17,8 +17,7 @@
         "dotenv": "^10.0.0",
         "ethereum-waffle": "^3.4.0",
         "ethers": "^5.5.1",
-        "hardhat": "^2.6.8",
-        "web3": "^1.6.1"
+        "hardhat": "^2.6.8"
     },
     "dependencies": {
         "@dicebear/avatars": "^4.10.1",
