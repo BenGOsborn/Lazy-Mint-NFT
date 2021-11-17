@@ -13,9 +13,8 @@ async function main() {
     console.log("Initialized Icons contract from " + FILENAME);
 
     // Mint a token
-    const NUM_TOKENS = 1;
     const minter = await signer.getAddress();
-    await icons.earlyMintList(minter, NUM_TOKENS);
+    await icons.addEarlyMinter(minter);
     console.log("Added " + minter + " to early mint list");
 
     const fee = await icons.mintFee();
