@@ -93,6 +93,8 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         earlyMinters[_address] = true;
     }
 
+    // **** Try and merge back into one single function that is used by both ?
+
     // Mint the token if the user is approved and it is still in the early mint phase
     function earlyMint() external {
         // Requirements
@@ -118,13 +120,6 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     // Mint the token if it is after the early minting phase
     function mint() external payable mintable {
         require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
-    }
-
-    function requestData() external {
-        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
-        request.add("path", "chunks.0");
-        sendChainlinkRequestTo(oracle, request, linkFee);
     }
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
