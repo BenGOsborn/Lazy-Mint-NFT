@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "scripts": {
         "build": "npx hardhat compile",
-        "test": "npx hardhat run --network maticMumbai scripts/test.js",
         "server": "node app.js",
         "deploy": "npx hardhat run --network maticMumbai scripts/deploy.js",
         "mint": "npx hardhat run --network maticMumbai scripts/mint.js",
