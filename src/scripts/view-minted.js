@@ -14,7 +14,7 @@ async function main() {
     const filter = icons.filters.Transfer();
     const blockNumber = (await hre.ethers.provider.getBlock()).number;
     const events = await icons.queryFilter(filter, blockNumber - 1000, blockNumber);
-    // console.log(events);
+    console.log(events);
 }
 
 main()
