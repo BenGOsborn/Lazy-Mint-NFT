@@ -3,24 +3,23 @@ const IconsABI = require("../artifacts/contracts/Icons.sol/Icons.json");
 const fs = require("fs");
 
 async function main() {
-    // Initialize the signer
-    const signer = hre.ethers.provider.getSigner();
-
     // Initialize the contract
+    const signer = hre.ethers.provider.getSigner();
     const FILENAME = "address.txt";
     const iconsAddress = fs.readFileSync(FILENAME, "utf8");
     const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, signer);
     console.log("Initialized Icons contract from " + FILENAME);
 
-    // Mint a token
+    // Add the minter to the early mint list (NOT STRICTLY NECESSARY IF THE OWNER OR THE EARLY MINT PERIOD HAS ENDED)
     const minter = await signer.getAddress();
     await icons.addEarlyMinter(minter);
     console.log("Added " + minter + " to early mint list");
 
+    // Mint a token
     const fee = await icons.mintFee();
-    await icons.earlyMint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
+    await icons.earlyMint({ value: fee }); // If early mint period has ended, comment this line and uncomment the next line
     // await icons.mint(NUM_TOKENS, { value: fee.mul(NUM_TOKENS) });
-    console.log("Minted " + NUM_TOKENS + " tokens");
+    console.log("Minted token");
 
     // View the minted NFT events
     icons.on("TransferSingle", (operator, from, to, id, value) => {
