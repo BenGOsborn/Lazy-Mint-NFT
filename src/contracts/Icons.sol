@@ -129,7 +129,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     }
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
-        // Make sure that the request has not already been fulfilled
+        // Make sure that the request has not already been fulfilled and is initiated
         require(mintRequests[_requestId].initiated, "Icons: Mint request has not been initiated");
         require(!mintRequests[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
@@ -149,13 +149,13 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     }
 
     function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
-        // Make sure that the request has not already been fulfilled
-        require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled");
-
         // Mint the new token
         bytes32 mintRequestPtr = mintRequestPtrs[_requestId].mintRequestPtr;
         MintRequest memory mintRequest = mintRequests[mintRequestPtr];
+
+        // Make sure that the request has not already been fulfilled and is initiated
         require(mintRequest.initiated, "Icons: Mint request has not been initiated");
+        require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
         bytes memory tokenUri = abi.encodePacked(mintRequest.tempUri, _response);
         _safeMint(mintRequest.minter, mintRequest.tokenId, tokenUri);
