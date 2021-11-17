@@ -5,8 +5,8 @@
         "server": "node app.js",
         "deploy": "npx hardhat run --network maticMumbai scripts/deploy.js",
         "mint": "npx hardhat run --network maticMumbai scripts/mint.js",
-        "withdraw": "npx hardhat run --network maticMumbai scripts/withdraw.js",
-        "view-minted": "npx hardhat run --network maticMumbai scripts/view-minted.js"
+        "view-minted": "npx hardhat run --network maticMumbai scripts/view-minted.js",
+        "withdraw": "npx hardhat run --network maticMumbai scripts/withdraw.js"
     },
     "devDependencies": {
         "@chainlink/contracts": "^0.2.2",
