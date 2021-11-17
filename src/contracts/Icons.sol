@@ -77,7 +77,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     }
 
     // Verify the tokens may be minted
-    modifier mintable() {
+    modifier mintable {
         require(tokenId + 1 < MAX_TOKENS, "Icons: Max number of tokens has already been reached");
         require(msg.value >= MINT_FEE || _msgSender() == owner(), "Icons: Not enough funds to mint token");
         _;
