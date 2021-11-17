@@ -48,11 +48,18 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         earlyMintEnd = earlyMintEnd_;
 
         // Initialize Chainlink data
-        oracle = oracle_;
-        jobId = jobId_;
-        linkFee = linkFee_;
-        apiUrl = apiUrl_;
-        linkAddress = linkAddress_;
+        // oracle = oracle_;
+        // jobId = jobId_;
+        // linkFee = linkFee_;
+        // apiUrl = apiUrl_;
+        // linkAddress = linkAddress_;
+
+        linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
+        setChainlinkToken(linkAddress);
+        oracle = 0xc8D925525CA8759812d0c299B90247917d4d4b7C;
+        jobId = "a7330d0b4b964c05abc66a26307047c0";
+        linkFee = 0.01 * 10 ** 18; // (Varies by network and job)
+
         setChainlinkToken(linkAddress);
     }
 
