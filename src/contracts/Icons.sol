@@ -106,7 +106,8 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
         request.add("path", "chunks.0");
-        bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
+        sendChainlinkRequestTo(oracle, request, linkFee);
+        // bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
         // mintRequests[requestId] = MintRequest({
         //     tokenId: tokenId,
         //     minter: _msgSender(),
