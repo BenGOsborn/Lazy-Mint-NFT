@@ -14,14 +14,11 @@ async function main() {
     const filter = icons.filters.Transfer();
     const blockNumber = (await hre.ethers.provider.getBlock()).number;
     const events = await icons.queryFilter(filter, blockNumber - 1000, blockNumber); // Number of blocks to view is limited to 1000
-    console.log("Events:\n=======");
+    console.log("Metadata:\n=======");
     for (const event of events) {
-        console.log(event.args);
+        const metadata = await icons.tokenURI(event.args.tokenId);
+        console.log(`TokenID: ${event.args.tokenId} | URI: ${metadata}`);
     }
-
-    // Get the metadata
-    const metadata = await icons.tokenURI(0);
-    console.log(metadata);
 }
 
 main()
