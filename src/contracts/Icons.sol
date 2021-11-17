@@ -66,7 +66,6 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
     // Get the URI for a token
     function tokenURI(uint256 _tokenId) public view override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-
         return string(abi.encodePacked(_baseURI(), tokenUris[_tokenId]));
     }
 
@@ -149,7 +148,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         // Mint the new token
         bytes memory tokenUri = abi.encodePacked(mintRequest.tempUri, _response);
         _safeMint(mintRequest.minter, mintRequest.tokenId, tokenUri);
-        tokenUris[mintRequest.tokenId] = tokenUri;
+        tokenUris[mintRequest.tokenId] = string(tokenUri);
         tokenId++;
     }
 
