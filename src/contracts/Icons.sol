@@ -147,19 +147,19 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
     function fulfill2(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
-        // require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled");
+        require(!mintRequestPtrs[_requestId].fulfilled, "Icons: Request has already been fulfilled");
 
         // Mint the new token
-        // bytes32 mintRequestPtr = mintRequestPtrs[_requestId].mintRequestPtr;
-        // MintRequest memory mintRequest = mintRequests[mintRequestPtr];
+        bytes32 mintRequestPtr = mintRequestPtrs[_requestId].mintRequestPtr;
+        MintRequest memory mintRequest = mintRequests[mintRequestPtr];
 
-        // bytes memory tokenUri = abi.encodePacked(mintRequest.tempUri, _response);
-        // _safeMint(mintRequest.minter, mintRequest.tokenId, tokenUri);
-        // tokenUris[mintRequest.tokenId] = string(tokenUri);
-        // tokenId++;
+        bytes memory tokenUri = abi.encodePacked(mintRequest.tempUri, _response);
+        _safeMint(mintRequest.minter, mintRequest.tokenId, tokenUri);
+        tokenUris[mintRequest.tokenId] = string(tokenUri);
+        tokenId++;
 
         // Update the mint request
-        // mintRequestPtrs[_requestId].fulfilled = true;
+        mintRequestPtrs[_requestId].fulfilled = true;
     }
 
     // Withdraw the coins to the sender
