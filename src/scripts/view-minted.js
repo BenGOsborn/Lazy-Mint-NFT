@@ -12,11 +12,13 @@ async function main() {
 
     // View the minted NFTs
     console.log("Minted NFT's:\n=============");
-    icons.on("Transfer", (from, to, tokenId) => {
-        console.log(from, to, tokenId);
+    const logs = await hre.ethers.provider.getLogs();
+    console.log(logs);
+    // icons.on("Transfer", (from, to, tokenId) => {
+    //     console.log(from, to, tokenId);
 
-        // **** Also log the metadata of the tokens
-    });
+    //     // **** Also log the metadata of the tokens
+    // });
 }
 
 main()
