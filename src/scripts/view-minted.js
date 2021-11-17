@@ -13,8 +13,7 @@ async function main() {
     // Get the events
     const filter = icons.filters.Transfer();
     const blockNumber = (await hre.ethers.provider.getBlock()).number;
-    const events = await icons.queryFilter(filter, blockNumber - 1000, blockNumber);
-    // const events = await icons.queryFilter(filter, 21566180, 21566190);
+    const events = await icons.queryFilter(filter, blockNumber - 1000, blockNumber); // Number of blocks to view is limited to 1000
     console.log("Events:\n=======");
     for (const event of events) {
         console.log(event.args);
