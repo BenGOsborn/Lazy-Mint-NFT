@@ -12,11 +12,6 @@ async function main() {
 
     // View the minted NFTs
     console.log("Minted NFT's:\n=============");
-    const logs = await hre.ethers.provider.getLogs({
-        address: iconsAddress,
-        topics: [hre.ethers.utils.id("Transfer(address, address, uint256)"), null, hre.ethers.utils.hexZeroPad(await signer.getAddress(), 32)],
-    });
-    console.log(logs);
 }
 
 main()
