@@ -95,43 +95,37 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
     // Mint the token if the user is approved and it is still in the early mint phase
     function earlyMint() external payable mintable {
+        // Requirements
         require(block.timestamp < earlyMintEnd, "Icons: Early minting phase is over, please use 'mint' instead");
         require(earlyMinters[_msgSender()] == true || _msgSender() == owner(), "Icons: You are not authorized to mint a token");
+
+        // Update mint status
         earlyMinters[_msgSender()] = false;
-        _mintIcon();
+
+        // Call the request
+        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
+        request.add("path", "chunks.0");
+        bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
+        mintRequests[requestId] = MintRequest({
+            tokenId: tokenId,
+            minter: _msgSender(),
+            tempUri: "",
+            fulfilled: false
+        });
     }
 
     // Mint the token if it is after the early minting phase
     function mint() external payable mintable {
         require(block.timestamp >= earlyMintEnd, "Icons: Contract is still in early minting phase, please use 'earlyMint' instead");
-        _mintIcon();
     }
 
-    function requestData() external {
-        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
-        request.add("path", "chunks.0");
-        sendChainlinkRequestTo(oracle, request, linkFee);
-    }
-
-    // Mint a new Icon
-    function _mintIcon() internal {
-        // Initialize the request
-        Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
-        // request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId)));
-        request.add("get", "https://lazy-nft.herokuapp.com/generate?tokenId=3");
-        request.add("path", "chunks.0");
-        sendChainlinkRequestTo(oracle, request, linkFee);
-
-        // Update the new current token id
-        // bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
-        // mintRequests[requestId] = MintRequest({
-        //     tokenId: tokenId,
-        //     minter: _msgSender(),
-        //     tempUri: "",
-        //     fulfilled: false
-        // });
-    }
+    // function requestData() external {
+    //     Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
+    //     request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
+    //     request.add("path", "chunks.0");
+    //     sendChainlinkRequestTo(oracle, request, linkFee);
+    // }
 
     function fulfill1(bytes32 _requestId, bytes32 _response) public recordChainlinkFulfillment(_requestId) {
         // Make sure that the request has not already been fulfilled
