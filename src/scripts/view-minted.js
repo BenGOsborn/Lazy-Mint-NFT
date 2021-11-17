@@ -9,6 +9,11 @@ async function main() {
     const iconsAddress = fs.readFileSync(FILENAME, "utf8");
     const icons = new hre.ethers.Contract(iconsAddress, IconsABI.abi, signer);
     console.log("Initialized Icons contract from " + FILENAME);
+
+    // Get the events
+    const filter = icons.filters.Transfer();
+    const events = await icons.queryFilter(filter);
+    console.log(events);
 }
 
 main()
