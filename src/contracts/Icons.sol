@@ -112,8 +112,8 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         _mintIcon();
     }
 
+    // Request for a new token to be generated and minted
     function _mintIcon() internal {
-        // Call the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill1.selector);
         request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", tokenId.toString())));
         request.add("path", "chunks.0");
@@ -132,7 +132,7 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
 
         // Initialize the request
         Chainlink.Request memory request = buildChainlinkRequest(jobId, address(this), this.fulfill2.selector);
-        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", mintRequests[_requestId].tokenId))); // **** Maybe this needs to be 'toString' ?
+        request.add("get", string(abi.encodePacked(apiUrl, "?tokenId=", mintRequests[_requestId].tokenId.toString()))); // **** Maybe this needs to be 'toString' ?
         request.add("path", "chunks.1");
         bytes32 requestId = sendChainlinkRequestTo(oracle, request, linkFee);
 
