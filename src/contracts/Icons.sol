@@ -56,13 +56,6 @@ contract Icons is Ownable, ERC721, ChainlinkClient {
         apiUrl = apiUrl_;
         linkAddress = linkAddress_;
         setChainlinkToken(linkAddress);
-
-        // linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
-        // setChainlinkToken(linkAddress);
-        // oracle = 0xc8D925525CA8759812d0c299B90247917d4d4b7C;
-        // jobId = "a7330d0b4b964c05abc66a26307047c0";
-        // apiUrl = "https://lazy-nft.herokuapp.com/generate";
-        // linkFee = 0.01 * 10 ** 18; // (Varies by network and job)
     }
 
     // Base URI for the metadata
