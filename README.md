@@ -1,4 +1,4 @@
-# [Lazy Mint NFT](https://mumbai.polygonscan.com/address/0xfFcd0Af040fed0fB118356facAE520Dde4D94A82)
+# [Lazy Mint NFT](https://mumbai.polygonscan.com/address/0xf1366041587dFB4DEe212517587567C4B5b8bB7B)
 
 ## A lazy minting script that is able to mint new NFT's and upload them to IPFS at the time of the function call using Chainlink.
 
