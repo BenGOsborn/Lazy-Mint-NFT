@@ -21,7 +21,7 @@ async function main() {
     const Icons = await hre.ethers.getContractFactory("Icons");
     const icons = await Icons.deploy(NAME, SYMBOL, MAX_TOKENS, MINT_FEE, EARLY_MINT_END, ORACLE, JOB_ID, LINK_FEE, API_URL, LINK_ADDRESS);
     await icons.deployed();
-    console.log("Deployed contract " + icons.address);
+    console.log(`Deployed contract https://mumbai.polygonscan.com/address/${icons.address}`);
 
     // Save the address to a file
     const FILENAME = "address.txt";
