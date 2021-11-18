@@ -11,7 +11,7 @@ async function main() {
     const MINT_FEE = 10;
     const EARLY_MINT_END = Math.floor((Date.now() + 3.6e6) / 1000);
     const ORACLE = "0xc8D925525CA8759812d0c299B90247917d4d4b7C";
-    const JOB_ID = hre.ethers.utils.hexZeroPad("0xa7330d0b4b964c05abc66a26307047c0", 32);
+    const JOB_ID = hre.ethers.utils.formatBytes32String("a7330d0b4b964c05abc66a26307047c0");
     const LINK_FEE = (0.01e18).toString();
     const API_URL = "https://lazy-nft.herokuapp.com/generate";
     const LINK_ADDRESS = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
